@@ -6,38 +6,42 @@ import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/Icons"
 
+import { buttonVariants } from "./ui/Button"
+
 interface NavbarProps {
   items?: NavItem[]
 }
 
 export function Navbar({ items }: NavbarProps) {
   return (
-    <div className="flex gap-6 md:gap-10">
+    <div className="flex gap-2 md:gap-4">
       <Link href="/" className="flex items-center space-x-2">
-        <Icons.target className="h-6 sm:h-7 w-6 sm:w-7" />
-        <span className="inline-block dark:font-bold font-medium text-base sm:text-lg">
+        <Icons.openbox className="h-7 sm:h-7 w-7 sm:w-7" />
+        <span className="hidden sm:inline-block dark:font-bold font-medium text-base sm:text-lg">
           {siteConfig.name}
         </span>
       </Link>
-      {/* {items?.length ? (
-        <nav className="flex gap-6">
+      {items?.length && (
+        <nav className="flex">
           {items?.map(
             (item, index) =>
               item.href && (
                 <Link
                   key={index}
                   href={item.href}
-                  className={cn(
-                    "flex items-center text-sm font-medium text-muted-foreground",
-                    item.disabled && "cursor-not-allowed opacity-80"
-                  )}
+                  className={buttonVariants({ size: "sm", variant: "link" })}
                 >
                   {item.title}
                 </Link>
               )
           )}
         </nav>
-      ) : null} */}
+      )}
     </div>
   )
 }
+
+// className={cn(
+//   "flex items-center text-sm font-medium",
+//   item.disabled && "cursor-not-allowed opacity-80"
+// )}

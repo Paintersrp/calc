@@ -1,21 +1,29 @@
-import type { FC } from "react"
+"use client"
 
-import useConfigStore from "@/lib/state/config"
-import useResultStore from "@/lib/state/results"
+import { useEffect, type FC } from "react"
+
+import { useConfigStore } from "@/lib/state/config"
+import { useResultStore } from "@/lib/state/results"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/ToggleGroup"
-import InfoHover from "@/components/InfoHover"
+import { InfoPopover } from "@/components/InfoPopover"
 
 import CalcDailyConfig from "./CalcDailyConfig"
 
 const CalcConfiguration: FC = () => {
-  const { type, setType } = useConfigStore()
+  const { type, setType, shift, updateRemainingHoursAuto } = useConfigStore()
   const { setRequiredRate } = useResultStore()
+
+  useEffect(() => {
+    const intervalId = setInterval(updateRemainingHoursAuto, 60000)
+
+    return () => clearInterval(intervalId)
+  }, [shift, updateRemainingHoursAuto])
 
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-medium">Rate Calculator Configuration</h1>
-        <InfoHover>
+        <InfoPopover>
           {/* <p className="text-lg font-semibold mb-2">Calculator Overview</p> */}
           <ul className="list-disc list-inside ">
             <li>
@@ -58,7 +66,7 @@ const CalcConfiguration: FC = () => {
             This tool assists in calculating the required rate for associates, ensuring accuracy and
             efficiency in workforce management.
           </p>
-        </InfoHover>
+        </InfoPopover>
       </div>
       <ToggleGroup
         variant="outline"

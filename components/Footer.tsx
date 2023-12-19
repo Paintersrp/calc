@@ -9,10 +9,10 @@ import { TooltipWrapper } from "@/components/TooltipWrapper"
 
 export function Footer() {
   return (
-    <footer className="bg-background sticky bottom-0 z-40 w-full border-t dark:border-slate-700 border-slate-300">
-      <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
+    <footer className="bg-background bottom-0 z-40 w-full border-t dark:border-slate-700 border-slate-300">
+      <div className="px-4 sm:px-0 sm:container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
         <div className="flex space-x-2 items-center">
-          <Icons.copyright className="h-5 sm:h-6 w-5 sm:w-6" />
+          <Icons.copyright className="h-6 sm:h-6 w-6 sm:w-6" />
           <div className="flex flex-col">
             <p className="dark:text-white text-black dark:font-bold font-medium text-sm">
               2023 - Rate Calculator
@@ -33,7 +33,7 @@ export function Footer() {
                     variant: "ghost",
                   })}
                 >
-                  <Icons.gitHub className="h-5 sm:h-6 w-5 sm:w-6" />
+                  <Icons.gitHub className="h-6 sm:h-6 w-6 sm:w-6" />
                   <span className="sr-only">GitHub</span>
                 </div>
               </Link>
@@ -48,7 +48,7 @@ export function Footer() {
                     variant: "ghost",
                   })}
                 >
-                  <Icons.contact className="h-5 sm:h-6 w-5 sm:w-6" />
+                  <Icons.contact className="h-6 sm:h-6 w-6 sm:w-6" />
                   <span className="sr-only">Email Address contact</span>
                 </div>
               </Link>

@@ -1,12 +1,16 @@
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: "Rate Calculator",
+  name: "CRETs",
   description: "Designed with TypeScript, built with React and NextJS",
   mainItems: [
     {
-      title: "Home",
+      title: "Rate",
       href: "/",
+    },
+    {
+      title: "Engagements",
+      href: "/engagements",
     },
   ],
   links: {

@@ -80,4 +80,4 @@ const useConfigStore = create(
   )
 )
 
-export default useConfigStore
+export { useConfigStore }

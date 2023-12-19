@@ -54,4 +54,4 @@ const useInputStore = create(
   )
 )
 
-export default useInputStore
+export { useInputStore }

@@ -1,14 +1,24 @@
+"use client"
+
 import type { FC } from "react"
 
-import useConfigStore from "@/lib/state/config"
-import useInputStore from "@/lib/state/input"
-import useResultStore from "@/lib/state/results"
+import { useInputStore } from "@/lib/state/input"
+import { useResultStore } from "@/lib/state/results"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/Accordion"
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/Table"
 
 import CalcResultsSkeleton from "./CalcResultsSkeleton"
 
@@ -68,33 +78,24 @@ const CalcResults: FC = () => {
                 </div>
               </AccordionTrigger>
               <AccordionContent className="text-[0.95rem]">
-                <p>
-                  Adjusted Rate: <span className="font-semibold">{rate.toFixed(2)} UPH</span>
-                </p>
-                <p>
-                  Units to process per 30 minutes:{" "}
-                  <span className="font-semibold">
-                    {calculateUnitsPerTimeFrame(rate, 30).toFixed(2)}
-                  </span>
-                </p>
-                <p>
-                  Units to process per 20 minutes:{" "}
-                  <span className="font-semibold">
-                    {calculateUnitsPerTimeFrame(rate, 20).toFixed(2)}
-                  </span>
-                </p>
-                <p>
-                  Units to process per 15 minutes:{" "}
-                  <span className="font-semibold">
-                    {calculateUnitsPerTimeFrame(rate, 15).toFixed(2)}
-                  </span>
-                </p>
-                <p>
-                  Units to process per 10 minutes:{" "}
-                  <span className="font-semibold">
-                    {calculateUnitsPerTimeFrame(rate, 10).toFixed(2)}
-                  </span>
-                </p>
+                <Table>
+                  <TableHeader>
+                    <TableRow className="dark:font-bold font-semibold text-base">
+                      <TableHead scope="col">Interval (minutes)</TableHead>
+                      <TableHead scope="col">Units to Process</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody className="dark:font-semibold font-medium">
+                    {[60, 30, 20, 15, 10].map((timeFrame) => (
+                      <TableRow key={timeFrame}>
+                        <TableCell>{timeFrame}m</TableCell>
+                        <TableCell>
+                          {calculateUnitsPerTimeFrame(rate, timeFrame).toFixed(2)} Units
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </AccordionContent>
             </AccordionItem>
           )

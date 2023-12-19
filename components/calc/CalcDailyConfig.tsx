@@ -1,9 +1,9 @@
 import type { FC } from "react"
 
 import { calculateRequiredRateAuto, calculateRequiredRateManual } from "@/lib/calc-rate"
-import useConfigStore from "@/lib/state/config"
-import useInputStore from "@/lib/state/input"
-import useResultStore from "@/lib/state/results"
+import {useConfigStore} from "@/lib/state/config"
+import {useInputStore} from "@/lib/state/input"
+import {useResultStore} from "@/lib/state/results"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import { Label } from "@/components/ui/Label"

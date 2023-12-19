@@ -17,8 +17,8 @@ export function ThemeToggle() {
         size="icon"
         onClick={() => setTheme(theme === "light" ? "dark" : "light")}
       >
-        <Sun className="h-5 sm:h-6 w-5 sm:w-6 dark:hidden" />
-        <Moon className="hidden h-5 sm:h-6 w-5 sm:w-6 dark:block" />
+        <Sun className="h-6 sm:h-6 w-6 sm:w-6 dark:hidden" />
+        <Moon className="hidden h-6 sm:h-6 w-6 sm:w-6 dark:block" />
         <span className="sr-only">Toggle theme</span>
       </Button>
     </TooltipWrapper>

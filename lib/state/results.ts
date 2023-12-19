@@ -13,4 +13,4 @@ const useResultStore = create<ResultStore>((set, get) => ({
   },
 }))
 
-export default useResultStore
+export { useResultStore }
