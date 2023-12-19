@@ -1,8 +1,9 @@
 import {
   Calculator,
-  Contact,
   Copyright,
+  Info,
   LucideProps,
+  MailPlus,
   Moon,
   SunMedium,
   Target,
@@ -16,10 +17,11 @@ export const Icons = {
   sun: SunMedium,
   moon: Moon,
   twitter: Twitter,
-  contact: Contact,
+  contact: MailPlus,
   copyright: Copyright,
   target: Target,
   calc: Calculator,
+  info: Info,
   logo: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
       <path

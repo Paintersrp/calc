@@ -11,16 +11,14 @@ export function ThemeToggle() {
   const { setTheme, theme } = useTheme()
 
   return (
-    <TooltipWrapper
-      content={theme === "light" ? "Swap to Dark" : "Swap to Light"}
-    >
+    <TooltipWrapper content={theme === "light" ? "Swap to Dark" : "Swap to Light"}>
       <Button
         variant="ghost"
         size="icon"
         onClick={() => setTheme(theme === "light" ? "dark" : "light")}
       >
-        <Sun className="h-[1.5rem] w-[1.3rem] dark:hidden" />
-        <Moon className="hidden h-5 w-5 dark:block" />
+        <Sun className="h-5 sm:h-6 w-5 sm:w-6 dark:hidden" />
+        <Moon className="hidden h-5 sm:h-6 w-5 sm:w-6 dark:block" />
         <span className="sr-only">Toggle theme</span>
       </Button>
     </TooltipWrapper>

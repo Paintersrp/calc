@@ -2,8 +2,7 @@ export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
   name: "Rate Calculator",
-  description:
-    "Beautifully designed components built with Radix UI and Tailwind CSS.",
+  description: "Designed with TypeScript, built with React and NextJS",
   mainItems: [
     {
       title: "Home",
@@ -12,6 +11,6 @@ export const siteConfig = {
   ],
   links: {
     email: "mailto:paintersrp@gmail.com",
-    github: "https://github.com/shadcn/ui",
+    github: "https://github.com/Paintersrp/calc",
   },
 }

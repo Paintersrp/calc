@@ -14,8 +14,10 @@ export function Navbar({ items }: NavbarProps) {
   return (
     <div className="flex gap-6 md:gap-10">
       <Link href="/" className="flex items-center space-x-2">
-        <Icons.target className="h-6 w-6" />
-        <span className="inline-block font-bold">{siteConfig.name}</span>
+        <Icons.target className="h-6 sm:h-7 w-6 sm:w-7" />
+        <span className="inline-block dark:font-bold font-medium text-base sm:text-lg">
+          {siteConfig.name}
+        </span>
       </Link>
       {/* {items?.length ? (
         <nav className="flex gap-6">

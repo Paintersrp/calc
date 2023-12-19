@@ -9,15 +9,15 @@ import { TooltipWrapper } from "@/components/TooltipWrapper"
 
 export function Footer() {
   return (
-    <footer className="bg-background sticky bottom-0 z-40 w-full border-t">
+    <footer className="bg-background sticky bottom-0 z-40 w-full border-t dark:border-slate-700 border-slate-300">
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
         <div className="flex space-x-2 items-center">
-          <Icons.copyright className="h-6 w-6" />
+          <Icons.copyright className="h-5 sm:h-6 w-5 sm:w-6" />
           <div className="flex flex-col">
-            <p className="dark:text-white text-black font-bold text-sm">
+            <p className="dark:text-white text-black dark:font-bold font-medium text-sm">
               2023 - Rate Calculator
             </p>
-            <p className="dark:text-white text-black font-bold text-sm">
+            <p className="dark:text-white text-black dark:font-bold font-medium text-sm">
               Ryan Painter
             </p>
           </div>
@@ -26,18 +26,14 @@ export function Footer() {
           <nav className="flex items-center space-x-1">
             {/* Github Button and Link */}
             <TooltipWrapper content="View code on Github">
-              <Link
-                href={siteConfig.links.github}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <Link href={siteConfig.links.github} target="_blank" rel="noreferrer">
                 <div
                   className={buttonVariants({
                     size: "icon",
                     variant: "ghost",
                   })}
                 >
-                  <Icons.gitHub className="h-5 w-5" />
+                  <Icons.gitHub className="h-5 sm:h-6 w-5 sm:w-6" />
                   <span className="sr-only">GitHub</span>
                 </div>
               </Link>
@@ -45,18 +41,14 @@ export function Footer() {
 
             {/* Portfolio Icon and Link */}
             <TooltipWrapper content="Contact Me">
-              <Link
-                href={siteConfig.links.email}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <Link href={siteConfig.links.email} target="_blank" rel="noreferrer">
                 <div
                   className={buttonVariants({
                     size: "icon",
                     variant: "ghost",
                   })}
                 >
-                  <Icons.contact className="h-5 w-5" />
+                  <Icons.contact className="h-5 sm:h-6 w-5 sm:w-6" />
                   <span className="sr-only">Email Address contact</span>
                 </div>
               </Link>
