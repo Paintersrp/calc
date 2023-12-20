@@ -1,5 +1,8 @@
+"use client"
+
 import type { FC } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 import { NavItem } from "@/types/nav"
 import { siteConfig } from "@/config/site"
@@ -12,6 +15,8 @@ interface NavbarProps {
 }
 
 const Navbar: FC<NavbarProps> = ({ items }) => {
+  const pathname = usePathname()
+
   return (
     <div className="flex gap-2 md:gap-4">
       <Link href="/" className="flex items-center space-x-2">
@@ -22,18 +27,25 @@ const Navbar: FC<NavbarProps> = ({ items }) => {
       </Link>
       {items?.length && (
         <nav className="flex">
-          {items?.map(
-            (item, index) =>
+          {items.map((item, index) => {
+            const active = pathname === item.href
+
+            return (
               item.href && (
                 <Link
                   key={index}
                   href={item.href}
-                  className={buttonVariants({ size: "sm", variant: "link" })}
+                  className={buttonVariants({
+                    size: "sm",
+                    variant: "link",
+                    className: active ? "underline-offset-4 underline" : "",
+                  })}
                 >
                   {item.title}
                 </Link>
               )
-          )}
+            )
+          })}
         </nav>
       )}
     </div>

@@ -4,9 +4,7 @@ import type { FC } from "react"
 
 import { useEngagements } from "@/lib/state/engagements"
 import { toast } from "@/hooks/useToast"
-
-import { Icons } from "../Icons"
-import { Button } from "../ui/Button"
+import { Button } from "@/components/ui/Button"
 import {
   Dialog,
   DialogClose,
@@ -16,7 +14,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/Dialog"
+} from "@/components/ui/Dialog"
+import { Icons } from "@/components/Icons"
 
 interface EngagementDeleteDialogProps {
   status: string
@@ -63,8 +62,8 @@ const EngagementDeleteDialog: FC<EngagementDeleteDialogProps> = ({ status, id })
         <DialogHeader>
           <DialogTitle>Are you sure?</DialogTitle>
           <DialogDescription className="dark:text-white">
-            This action cannot be undone. This will permanently delete your thread content and
-            remove the data from our servers. The thread and comments will remain.
+            This action cannot be undone. Confirmation will permanently delete the engagement from
+            storage.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="gap-2 sm:gap-0 justify-end md:justify-end">

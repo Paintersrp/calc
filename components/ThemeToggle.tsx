@@ -5,7 +5,7 @@ import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { Button } from "@/components/ui/Button"
-import { TooltipWrapper } from "@/components/TooltipWrapper"
+import { TooltipWrapper } from "@/components/ui/Tooltip"
 
 const ThemeToggle: FC = () => {
   const { setTheme, theme } = useTheme()

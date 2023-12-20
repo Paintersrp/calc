@@ -27,4 +27,20 @@ const TooltipContent = React.forwardRef<
 ))
 TooltipContent.displayName = TooltipPrimitive.Content.displayName
 
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
+interface TooltipWrapperProps {
+  children: React.ReactNode
+  content: string
+}
+
+const TooltipWrapper: React.FC<TooltipWrapperProps> = ({ children, content }) => {
+  return (
+    <Tooltip>
+      <TooltipTrigger>{children}</TooltipTrigger>
+      <TooltipContent>
+        <p className="dark:text-white text-dark">{content}</p>
+      </TooltipContent>
+    </Tooltip>
+  )
+}
+
+export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider, TooltipWrapper }

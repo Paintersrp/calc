@@ -5,9 +5,8 @@ import { useForm } from "react-hook-form"
 import { useEngagements, type Engagement } from "@/lib/state/engagements"
 import { EngagementRequest, EngagementSchema } from "@/lib/validators/engagement"
 import { toast } from "@/hooks/useToast"
-
-import { Input } from "../ui/Input"
-import { Textarea } from "../ui/Textarea"
+import { Input } from "@/components/ui/Input"
+import { Textarea } from "@/components/ui/Textarea"
 
 interface EngagementDetailFormProps {
   selected: Engagement

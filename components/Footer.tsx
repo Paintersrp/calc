@@ -5,8 +5,8 @@ import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/Button"
+import { TooltipWrapper } from "@/components/ui/Tooltip"
 import { Icons } from "@/components/Icons"
-import { TooltipWrapper } from "@/components/TooltipWrapper"
 
 const Footer: FC = () => {
   return (

@@ -1,5 +1,5 @@
-import { EngagementDetail } from "@/components/engagements/EngagementDetail"
-import { EngagementList } from "@/components/engagements/EngagementList"
+import { EngagementDetail } from "@/components/engagements/detail/EngagementDetail"
+import { EngagementList } from "@/components/engagements/list/EngagementList"
 
 export default function Page() {
   return (

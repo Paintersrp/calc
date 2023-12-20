@@ -7,21 +7,17 @@ import { useEngagements } from "@/lib/state/engagements"
 import { toast } from "@/hooks/useToast"
 import { Button } from "@/components/ui/Button"
 import { Separator } from "@/components/ui/Separator"
+import { TooltipWrapper } from "@/components/ui/Tooltip"
 
-import { TooltipWrapper } from "../TooltipWrapper"
-import { EngagementDeleteDialog } from "./EngagementDeleteDialog"
+import { EngagementDeleteDialog } from "../EngagementDeleteDialog"
 import { EngagementDetailForm } from "./EngagementDetailForm"
+import { EngagementDetailSkeleton } from "./EngagementDetailSkeleton"
 
 const EngagementDetail: FC = () => {
   const { selected, setSelected, markAsDone, undoMarkAsDone } = useEngagements()
 
   if (!selected) {
-    return (
-      <div className="text-base">
-        <h1 className="text-2xl font-medium mb-4">Engagement Details</h1>
-        <p>Select an engagement to view details</p>
-      </div>
-    )
+    return <EngagementDetailSkeleton />
   }
 
   // Function to handle copying engagement details
@@ -62,7 +58,7 @@ const EngagementDetail: FC = () => {
     <div>
       <div className="flex sm:flex-row flex-col sm:items-center items-start gap-2 justify-between">
         <div>
-          <h1 className="text-2xl font-medium">Engagement Details</h1>
+          <h1 className="text-2xl font-medium leading-none tracking-tight">Engagement Details</h1>
           <p className="dark:text-blue-400 text-blue-600 dark:font-semibold font-medium text-[0.925rem]">
             {format(selected.date, "MMMM d, yyyy hh:mm b")}
           </p>
