@@ -14,8 +14,14 @@ interface EngagementDetailFormProps {
 }
 
 const EngagementDetailForm: FC<EngagementDetailFormProps> = ({ selected }) => {
-  const { setSelected, setSelectedFromHistory, updateEngagement, updateEngagementHistory } =
-    useEngagements()
+  const {
+    setSelected,
+    setSelectedFromHistory,
+    setSelectedFromFollowUp,
+    updateEngagement,
+    updateEngagementHistory,
+    updateFollowUpEngagement,
+  } = useEngagements()
 
   const {
     register,
@@ -43,6 +49,9 @@ const EngagementDetailForm: FC<EngagementDetailFormProps> = ({ selected }) => {
         } else if (selected.status === "done") {
           updateEngagementHistory(selected.id, { ...data })
           setSelectedFromHistory(selected.id)
+        } else if (selected.status === "followUp") {
+          updateFollowUpEngagement(selected.id, { ...data })
+          setSelectedFromFollowUp(selected.id)
         }
 
         toast({
