@@ -2,16 +2,16 @@
 
 import { useEffect, type FC } from "react"
 
-import { useConfigStore } from "@/lib/state/config"
-import { useResultStore } from "@/lib/state/results"
+import { useConfig } from "@/lib/state/config"
+import { useResults } from "@/lib/state/results"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/ToggleGroup"
 import { InfoPopover } from "@/components/InfoPopover"
 
 import CalcDailyConfig from "./CalcDailyConfig"
 
 const CalcConfiguration: FC = () => {
-  const { type, setType, shift, updateRemainingHoursAuto } = useConfigStore()
-  const { setRequiredRate } = useResultStore()
+  const { type, setType, shift, updateRemainingHoursAuto } = useConfig()
+  const { setRequiredRate } = useResults()
 
   useEffect(() => {
     const intervalId = setInterval(updateRemainingHoursAuto, 60000)

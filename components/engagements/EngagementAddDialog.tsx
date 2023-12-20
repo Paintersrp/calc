@@ -6,7 +6,7 @@ import { Plus } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { useEngagementStore } from "@/lib/state/engagements"
+import { useEngagements } from "@/lib/state/engagements"
 import { toast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/Button"
 import {
@@ -33,7 +33,7 @@ const engagementSchema = z.object({
 type EngagementRequest = z.infer<typeof engagementSchema>
 
 const EngagementAddDialog: FC = () => {
-  const { engagements, addEngagement } = useEngagementStore()
+  const { addEngagement } = useEngagements()
   const [isAdding, setIsAdding] = useState<boolean>(false)
 
   const {
@@ -56,6 +56,7 @@ const EngagementAddDialog: FC = () => {
       toast({
         title: "Engagement Added",
         description: "The engagement has been successfully added.",
+        variant: "success",
       })
 
       setIsAdding(false)

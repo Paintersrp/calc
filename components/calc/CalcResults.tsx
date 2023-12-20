@@ -2,8 +2,8 @@
 
 import type { FC } from "react"
 
-import { useInputStore } from "@/lib/state/input"
-import { useResultStore } from "@/lib/state/results"
+import { useInputs } from "@/lib/state/input"
+import { useResults } from "@/lib/state/results"
 import {
   Accordion,
   AccordionContent,
@@ -23,8 +23,8 @@ import {
 import CalcResultsSkeleton from "./CalcResultsSkeleton"
 
 const CalcResults: FC = () => {
-  const { requiredRate } = useResultStore()
-  const { currentRate } = useInputStore()
+  const { requiredRate } = useResults()
+  const { currentRate } = useInputs()
 
   const levelRates = [
     { level: 5, rate: 1.0 },

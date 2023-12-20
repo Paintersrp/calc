@@ -9,26 +9,47 @@ interface Engagement {
   date: string
   type: string
   login: string
+  status: string
 }
 
 interface EngagementState {
   selected: Engagement | null
   setSelected: (id: string | null) => void
+  setSelectedFromHistory: (id: string | null) => void
+
   engagements: Engagement[]
-  addEngagement: (engagementData: Omit<Engagement, "id" | "date">) => void
+  engagementHistory: Engagement[]
+  addEngagement: (engagementData: Omit<Engagement, "id" | "date" | "status">) => void
+  deleteEngagement: (id: string) => void
+  deleteFromHistory: (id: string) => void
+  markAsDone: (id: string) => void
+  undoMarkAsDone: (id: string) => void
   getEngagement: (id: string) => Engagement | undefined
 }
 
-const useEngagementStore = create(
+const useEngagements = create(
   persist<EngagementState>(
     (set, get) => ({
+      // Getter/State for the currently selected engagement, for details display.
       selected: null,
+
+      // Setter for selected state
       setSelected: (id) => {
         if (!id) set({ selected: null })
 
         const engagement = get().engagements.find((e) => e.id === id)
         set({ selected: engagement })
       },
+
+      // Setter for selected state
+      setSelectedFromHistory: (id) => {
+        if (!id) set({ selected: null })
+
+        const engagement = get().engagementHistory.find((e) => e.id === id)
+        set({ selected: engagement })
+      },
+
+      // Array of active engagements
       engagements: [
         // Sample engagements for testing
         {
@@ -39,6 +60,7 @@ const useEngagementStore = create(
           date: new Date().toISOString(),
           type: "Meeting",
           login: "user1",
+          status: "active",
         },
         {
           id: nanoid(10),
@@ -48,6 +70,7 @@ const useEngagementStore = create(
           date: new Date().toISOString(),
           type: "Call",
           login: "user2",
+          status: "active",
         },
         {
           id: nanoid(10),
@@ -57,7 +80,12 @@ const useEngagementStore = create(
           date: "2023-01-15T09:00:00.000Z",
           type: "Meeting",
           login: "manager",
+          status: "active",
         },
+      ],
+
+      // Array of engagements marked done, up to 25 items
+      engagementHistory: [
         {
           id: nanoid(10),
           title: "Product Launch Review",
@@ -66,19 +94,67 @@ const useEngagementStore = create(
           date: "2023-01-20T11:00:00.000Z",
           type: "Review",
           login: "product_lead",
+          status: "done",
         },
       ],
+
+      // Adds a new engagement to the active array.
       addEngagement: (data) => {
         const newEngagement = {
           id: nanoid(10),
-          title: data.title,
-          description: data.description,
           date: new Date().toISOString(),
-          type: data.type,
-          login: data.login,
+          status: "active",
+          ...data,
         }
         set((state) => ({ engagements: [...state.engagements, newEngagement] }))
       },
+
+      // Removes an engagement from the active array.
+      deleteEngagement: (id) => {
+        set((state) => ({
+          engagements: state.engagements.filter((e) => e.id !== id),
+        }))
+      },
+
+      // Removes an engagement from the history array.
+      deleteFromHistory: (id) => {
+        set((state) => ({
+          engagementHistory: state.engagementHistory.filter((e) => e.id !== id),
+        }))
+      },
+
+      // Moves an engagement from the active array to the history array.
+      markAsDone: (id) => {
+        set((state) => {
+          const engagementIndex = state.engagements.findIndex((e) => e.id === id)
+          if (engagementIndex === -1) return state
+
+          const updatedEngagement = { ...state.engagements[engagementIndex], status: "done" }
+          const newEngagements = state.engagements.filter((e, index) => index !== engagementIndex)
+          const newHistory = [updatedEngagement, ...state.engagementHistory].slice(0, 25)
+
+          return { engagements: newEngagements, engagementHistory: newHistory }
+        })
+      },
+
+      // Moves an engagement back from the history array to the active array.
+      undoMarkAsDone: (id) => {
+        set((state) => {
+          const engagementIndex = state.engagementHistory.findIndex((e) => e.id === id)
+          if (engagementIndex === -1) return state
+
+          const updatedEngagement = {
+            ...state.engagementHistory[engagementIndex],
+            status: "active",
+          }
+          const newHistory = state.engagementHistory.filter((e, index) => index !== engagementIndex)
+          const newEngagements = [updatedEngagement, ...state.engagements]
+
+          return { engagements: newEngagements, engagementHistory: newHistory }
+        })
+      },
+
+      // Retrieves an engagement from the active array by its ID.
       getEngagement: (id) => get().engagements.find((e) => e.id === id),
     }),
     {
@@ -87,4 +163,4 @@ const useEngagementStore = create(
   )
 )
 
-export { useEngagementStore }
+export { useEngagements }

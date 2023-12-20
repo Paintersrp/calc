@@ -15,7 +15,7 @@ interface InputStore {
   updateHoursWorked: () => void
 }
 
-const useInputStore = create(
+const useInputs = create(
   persist<InputStore>(
     (set, get) => ({
       // Getters and Setters for Current AA Rate
@@ -54,4 +54,4 @@ const useInputStore = create(
   )
 )
 
-export { useInputStore }
+export { useInputs }

@@ -27,7 +27,7 @@ interface ConfigStore {
   setRemainingHoursWeekly: (remainingHoursWeekly: number) => void
 }
 
-const useConfigStore = create(
+const useConfig = create(
   persist<ConfigStore>(
     (set, get) => ({
       // Getters and Setters for Config Type Input
@@ -80,4 +80,4 @@ const useConfigStore = create(
   )
 )
 
-export { useConfigStore }
+export { useConfig }

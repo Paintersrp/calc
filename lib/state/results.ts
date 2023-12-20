@@ -5,7 +5,7 @@ interface ResultStore {
   setRequiredRate: (currentRate: number) => void
 }
 
-const useResultStore = create<ResultStore>((set, get) => ({
+const useResults = create<ResultStore>((set, get) => ({
   // Getters and Setters for calculated required rate
   requiredRate: 0,
   setRequiredRate: (requiredRate) => {
@@ -13,4 +13,4 @@ const useResultStore = create<ResultStore>((set, get) => ({
   },
 }))
 
-export { useResultStore }
+export { useResults }
