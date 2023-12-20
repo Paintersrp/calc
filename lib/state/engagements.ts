@@ -2,7 +2,7 @@ import { nanoid } from "nanoid"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
-interface Engagement {
+export interface Engagement {
   id: string
   title: string
   description: string
@@ -13,45 +13,57 @@ interface Engagement {
 }
 
 interface EngagementState {
+  engagements: Engagement[]
+  engagementHistory: Engagement[]
+  followUpEngagements: Engagement[]
+
   selected: Engagement | null
   setSelected: (id: string | null) => void
   setSelectedFromHistory: (id: string | null) => void
+  setSelectedFromFollowUp: (id: string | null) => void
 
-  engagements: Engagement[]
-  engagementHistory: Engagement[]
   addEngagement: (engagementData: Omit<Engagement, "id" | "date" | "status">) => void
+
+  updateEngagement: (id: string, data: Omit<Engagement, "id" | "date" | "status">) => void
+  updateEngagementHistory: (id: string, data: Omit<Engagement, "id" | "date" | "status">) => void
+  updateFollowUpEngagement: (id: string, data: Omit<Engagement, "id" | "date" | "status">) => void
+
+  deleteFromFollowUp: (id: string) => void
   deleteEngagement: (id: string) => void
   deleteFromHistory: (id: string) => void
+
   markAsDone: (id: string) => void
   undoMarkAsDone: (id: string) => void
+  markFollowUpAsDone: (id: string) => void
+  undoMarkFollowUpAsDone: (id: string) => void
+
+  markAsFollowUp: (id: string) => void
+
   getEngagement: (id: string) => Engagement | undefined
 }
 
 const useEngagements = create(
   persist<EngagementState>(
     (set, get) => ({
-      // Getter/State for the currently selected engagement, for details display.
-      selected: null,
-
-      // Setter for selected state
-      setSelected: (id) => {
-        if (!id) set({ selected: null })
-
-        const engagement = get().engagements.find((e) => e.id === id)
-        set({ selected: engagement })
-      },
-
-      // Setter for selected state
-      setSelectedFromHistory: (id) => {
-        if (!id) set({ selected: null })
-
-        const engagement = get().engagementHistory.find((e) => e.id === id)
-        set({ selected: engagement })
-      },
-
       // Array of active engagements
-      engagements: [
-        // Sample engagements for testing
+      engagements: [],
+
+      // Array of engagements marked done, up to 25 items
+      engagementHistory: [],
+
+      // Array of follow-up engagements
+      followUpEngagements: [
+        {
+          id: nanoid(10),
+          title: "Team Strategy Meeting",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eros odio, dictum nec elementum id, tristique eu neque. Duis nisl tellus, lacinia quis euismod ut, blandit in augue. Nunc at tortor posuere, laoreet nisi quis, mollis metus. Proin sed erat. ",
+          date: "2023-01-15T09:00:00.000Z",
+          type: "Meeting",
+          login: "manager",
+          status: "active",
+        },
+
         {
           id: nanoid(10),
           title: "Meeting with Team",
@@ -72,31 +84,34 @@ const useEngagements = create(
           login: "user2",
           status: "active",
         },
-        {
-          id: nanoid(10),
-          title: "Team Strategy Meeting",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eros odio, dictum nec elementum id, tristique eu neque. Duis nisl tellus, lacinia quis euismod ut, blandit in augue. Nunc at tortor posuere, laoreet nisi quis, mollis metus. Proin sed erat. ",
-          date: "2023-01-15T09:00:00.000Z",
-          type: "Meeting",
-          login: "manager",
-          status: "active",
-        },
       ],
 
-      // Array of engagements marked done, up to 25 items
-      engagementHistory: [
-        {
-          id: nanoid(10),
-          title: "Product Launch Review",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam lobortis nibh aliquet sem posuere aliquet. Sed finibus porttitor sem, vitae ultricies libero vulputate egestas. Praesent id lorem et arcu imperdiet consequat in eu lacus. In rutrum nisl posuere, pharetra ante.",
-          date: "2023-01-20T11:00:00.000Z",
-          type: "Review",
-          login: "product_lead",
-          status: "done",
-        },
-      ],
+      // Getter/State for the currently selected engagement, for details display.
+      selected: null,
+
+      // Setter for selected state from active array
+      setSelected: (id) => {
+        if (!id) set({ selected: null })
+
+        const engagement = get().engagements.find((e) => e.id === id)
+        set({ selected: engagement })
+      },
+
+      // Setter for selected state from history array
+      setSelectedFromHistory: (id) => {
+        if (!id) set({ selected: null })
+
+        const engagement = get().engagementHistory.find((e) => e.id === id)
+        set({ selected: engagement })
+      },
+
+      // Setter for selected state from follow up array
+      setSelectedFromFollowUp: (id) => {
+        if (!id) set({ selected: null })
+
+        const engagement = get().followUpEngagements.find((e) => e.id === id)
+        set({ selected: engagement })
+      },
 
       // Adds a new engagement to the active array.
       addEngagement: (data) => {
@@ -107,6 +122,72 @@ const useEngagements = create(
           ...data,
         }
         set((state) => ({ engagements: [...state.engagements, newEngagement] }))
+      },
+
+      // Update an existing engagement with the given data.
+      updateEngagement: (id, data) => {
+        set((state) => {
+          const engagementIndex = state.engagements.findIndex((e) => e.id === id)
+          if (engagementIndex === -1) return state
+
+          const updatedEngagement = {
+            ...state.engagements[engagementIndex],
+            ...data,
+          }
+
+          const newEngagements = [...state.engagements]
+          newEngagements[engagementIndex] = updatedEngagement
+
+          return {
+            engagements: newEngagements,
+            engagementHistory: state.engagementHistory,
+            followUpEngagements: state.followUpEngagements,
+          }
+        })
+      },
+
+      // Update an existing historical engagement with the given data.
+      updateEngagementHistory: (id, data) => {
+        set((state) => {
+          const engagementIndex = state.engagementHistory.findIndex((e) => e.id === id)
+          if (engagementIndex === -1) return state
+
+          const updatedEngagement = {
+            ...state.engagementHistory[engagementIndex],
+            ...data,
+          }
+
+          const newHistory = [...state.engagementHistory]
+          newHistory[engagementIndex] = updatedEngagement
+
+          return {
+            engagements: state.engagements,
+            engagementHistory: newHistory,
+            followUpEngagements: state.followUpEngagements,
+          }
+        })
+      },
+
+      // Update an existing follow up engagement with the given data.
+      updateFollowUpEngagement: (id, data) => {
+        set((state) => {
+          const engagementIndex = state.followUpEngagements.findIndex((e) => e.id === id)
+          if (engagementIndex === -1) return state
+
+          const updatedEngagement = {
+            ...state.followUpEngagements[engagementIndex],
+            ...data,
+          }
+
+          const newFollowUps = [...state.followUpEngagements]
+          newFollowUps[engagementIndex] = updatedEngagement
+
+          return {
+            engagements: state.engagements,
+            engagementHistory: state.engagementHistory,
+            followUpEngagements: newFollowUps,
+          }
+        })
       },
 
       // Removes an engagement from the active array.
@@ -120,6 +201,13 @@ const useEngagements = create(
       deleteFromHistory: (id) => {
         set((state) => ({
           engagementHistory: state.engagementHistory.filter((e) => e.id !== id),
+        }))
+      },
+
+      // Removes an engagement from the follow up array.
+      deleteFromFollowUp: (id) => {
+        set((state) => ({
+          followUpEngagements: state.followUpEngagements.filter((e) => e.id !== id),
         }))
       },
 
@@ -154,11 +242,75 @@ const useEngagements = create(
         })
       },
 
+      // Moves an engagement from the follow up array to the history array.
+      markFollowUpAsDone: (id) => {
+        set((state) => {
+          const engagementIndex = state.followUpEngagements.findIndex((e) => e.id === id)
+          if (engagementIndex === -1) return state
+
+          const updatedEngagement = {
+            ...state.followUpEngagements[engagementIndex],
+            status: "done",
+          }
+
+          const newFollowUps = state.followUpEngagements.filter(
+            (e, index) => index !== engagementIndex
+          )
+          const newHistory = [updatedEngagement, ...state.engagementHistory].slice(0, 25)
+
+          return {
+            engagements: state.engagements,
+            engagementHistory: newHistory,
+            followUpEngagements: newFollowUps,
+          }
+        })
+      },
+
+      // Moves an engagement back from the history array to the follow up array.
+      undoMarkFollowUpAsDone: (id) => {
+        set((state) => {
+          const engagementIndex = state.engagementHistory.findIndex((e) => e.id === id)
+          if (engagementIndex === -1) return state
+
+          const updatedEngagement = {
+            ...state.engagementHistory[engagementIndex],
+            status: "followUp",
+          }
+          const newHistory = state.engagementHistory.filter((e, index) => index !== engagementIndex)
+          const newFollowUps = [updatedEngagement, ...state.engagements]
+
+          return {
+            engagements: state.engagements,
+            engagementHistory: newHistory,
+            followUpEngagements: newFollowUps,
+          }
+        })
+      },
+
+      // Moves an engagement from the active array to the follow up array
+      markAsFollowUp: (id) => {
+        set((state) => {
+          const engagementIndex = state.engagements.findIndex((e) => e.id === id)
+          if (engagementIndex === -1) return state
+
+          const updatedEngagement = { ...state.engagements[engagementIndex], status: "done" }
+          const newEngagements = state.engagements.filter((e, index) => index !== engagementIndex)
+          const newFollowUps = [updatedEngagement, ...state.followUpEngagements]
+
+          return {
+            engagements: newEngagements,
+            engagementHistory: state.engagementHistory,
+            followUpEngagements: newFollowUps,
+          }
+        })
+      },
+
       // Retrieves an engagement from the active array by its ID.
       getEngagement: (id) => get().engagements.find((e) => e.id === id),
     }),
     {
       name: "engagement-storage",
+      getStorage: () => localStorage,
     }
   )
 )

@@ -8,31 +8,36 @@ import { toast } from "@/hooks/useToast"
 import { Button, buttonVariants } from "@/components/ui/Button"
 import { ScrollArea } from "@/components/ui/ScrollArea"
 import { Separator } from "@/components/ui/Separator"
-import { Icons } from "@/components/Icons"
 
+import { Icons } from "../Icons"
 import { TooltipWrapper } from "../TooltipWrapper"
 import { EngagementAddDialog } from "./EngagementAddDialog"
 import { EngagementDeleteDialog } from "./EngagementDeleteDialog"
 
-const EngagementHistoryList: FC = () => {
-  const { engagementHistory, selected, setSelected, setSelectedFromHistory, undoMarkAsDone } =
-    useEngagements()
+const EngagementFollowUpList: FC = () => {
+  const {
+    followUpEngagements,
+    selected,
+    setSelected,
+    setSelectedFromFollowUp,
+    markFollowUpAsDone,
+  } = useEngagements()
 
   const handleSelect = (id: string) => {
     if (id === selected?.id) {
-      return setSelectedFromHistory(null)
+      return setSelectedFromFollowUp(null)
     }
 
-    setSelectedFromHistory(id)
+    setSelectedFromFollowUp(id)
   }
 
-  const handleUndoMarkAsDone = (id: string) => {
-    undoMarkAsDone(id)
-    setSelected(id)
+  const handleMarkAsDone = (id: string) => {
+    markFollowUpAsDone(id)
+    setSelected(null)
 
     toast({
-      title: "Engagement successfully restored!",
-      description: "Engagement status has been adjusted from done to active.",
+      title: "Engagement done!",
+      description: "Engagement has been marked as done.",
       variant: "success",
     })
   }
@@ -40,7 +45,7 @@ const EngagementHistoryList: FC = () => {
   return (
     <ul className="space-y-1.5">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-medium">Engagement History</h1>
+        <h1 className="text-2xl font-medium">Engagement Follow Ups</h1>
         <TooltipWrapper content="Add new engagement">
           <EngagementAddDialog />
         </TooltipWrapper>
@@ -50,7 +55,7 @@ const EngagementHistoryList: FC = () => {
 
       <ScrollArea className="h-[600px] w-full">
         <div className="space-y-1.5">
-          {engagementHistory.map((engagement) => (
+          {followUpEngagements.map((engagement) => (
             <div key={engagement.id}>
               <li
                 className={buttonVariants({
@@ -67,18 +72,18 @@ const EngagementHistoryList: FC = () => {
                     </p>
                   </div>
                   <div className="flex gap-1 items-start">
-                    <TooltipWrapper content="Undo mark done">
+                    <TooltipWrapper content="Mark done">
                       <Button
                         size="iconSm"
                         variant="ghost"
                         className="dark:hover:!bg-slate-700 hover:!bg-slate-300"
                         onClick={(e) => {
                           e.stopPropagation()
-                          handleUndoMarkAsDone(engagement.id)
+                          handleMarkAsDone(engagement.id)
                         }}
                       >
-                        <Icons.undo className="h-4 w-4 text-green-400" />
-                        <span className="sr-only">Undo mark as done</span>
+                        <Icons.check className="h-4 w-4 text-green-400" />
+                        <span className="sr-only">Mark as done</span>
                       </Button>
                     </TooltipWrapper>
                     <TooltipWrapper content="Delete engagement">
@@ -99,4 +104,4 @@ const EngagementHistoryList: FC = () => {
   )
 }
 
-export { EngagementHistoryList }
+export { EngagementFollowUpList }

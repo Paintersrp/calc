@@ -7,7 +7,7 @@ import { useResults } from "@/lib/state/results"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/ToggleGroup"
 import { InfoPopover } from "@/components/InfoPopover"
 
-import CalcDailyConfig from "./CalcDailyConfig"
+import { CalcDailyConfig } from "./CalcDailyConfig"
 
 const CalcConfiguration: FC = () => {
   const { type, setType, shift, updateRemainingHoursAuto } = useConfig()

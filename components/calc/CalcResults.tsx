@@ -13,14 +13,13 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/Table"
 
-import CalcResultsSkeleton from "./CalcResultsSkeleton"
+import { CalcResultsSkeleton } from "./CalcResultsSkeleton"
 
 const CalcResults: FC = () => {
   const { requiredRate } = useResults()

@@ -1,5 +1,6 @@
 "use client"
 
+import type { FC } from "react"
 import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
@@ -7,12 +8,13 @@ import { buttonVariants } from "@/components/ui/Button"
 import { Icons } from "@/components/Icons"
 import { TooltipWrapper } from "@/components/TooltipWrapper"
 
-export function Footer() {
+const Footer: FC = () => {
   return (
     <footer className="bg-background bottom-0 z-40 w-full border-t dark:border-slate-700 border-slate-300">
       <div className="px-4 sm:px-0 sm:container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
         <div className="flex space-x-2 items-center">
-          <Icons.copyright className="h-6 sm:h-6 w-6 sm:w-6" />
+          <p className="dark:text-white text-black dark:font-bold font-medium text-sm">SRP</p>
+          {/* <Icons.copyright className="h-6 sm:h-6 w-6 sm:w-6" />
           <div className="flex flex-col">
             <p className="dark:text-white text-black dark:font-bold font-medium text-sm">
               2023 - Rate Calculator
@@ -20,7 +22,7 @@ export function Footer() {
             <p className="dark:text-white text-black dark:font-bold font-medium text-sm">
               Ryan Painter
             </p>
-          </div>
+          </div> */}
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">
@@ -59,3 +61,5 @@ export function Footer() {
     </footer>
   )
 }
+
+export { Footer }

@@ -15,8 +15,6 @@ import {
   SelectValue,
 } from "@/components/ui/Select"
 
-// Manual Clock Out Time
-
 const CalcDailyConfig: FC = () => {
   const {
     type,
@@ -37,8 +35,6 @@ const CalcDailyConfig: FC = () => {
   const handleCalculate = () => {
     let requiredRate: number
 
-    console.log("here")
-
     if (type === "manual") {
       requiredRate = calculateRequiredRateManual(
         targetRate,
@@ -47,7 +43,6 @@ const CalcDailyConfig: FC = () => {
         remainingHoursManual
       )
     } else {
-      console.log("here")
       requiredRate = calculateRequiredRateAuto(
         targetRate,
         unitsProcessed,
@@ -185,4 +180,4 @@ const CalcDailyConfig: FC = () => {
   )
 }
 
-export default CalcDailyConfig
+export { CalcDailyConfig }

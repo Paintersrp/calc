@@ -1,13 +1,13 @@
 "use client"
 
-import { FC, useState } from "react"
+import { type FC } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus } from "lucide-react"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
 
 import { useEngagements } from "@/lib/state/engagements"
-import { toast } from "@/hooks/use-toast"
+import { EngagementRequest, EngagementSchema } from "@/lib/validators/engagement"
+import { toast } from "@/hooks/useToast"
 import { Button } from "@/components/ui/Button"
 import {
   Dialog,
@@ -23,18 +23,8 @@ import { Input } from "@/components/ui/Input"
 import { Label } from "@/components/ui/Label"
 import { Textarea } from "@/components/ui/Textarea"
 
-const engagementSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string().min(1, "Description is required"),
-  type: z.string().min(1, "Type is required"),
-  login: z.string().min(1, "Login is required"),
-})
-
-type EngagementRequest = z.infer<typeof engagementSchema>
-
 const EngagementAddDialog: FC = () => {
   const { addEngagement } = useEngagements()
-  const [isAdding, setIsAdding] = useState<boolean>(false)
 
   const {
     register,
@@ -42,12 +32,8 @@ const EngagementAddDialog: FC = () => {
     formState: { errors },
     reset,
   } = useForm<EngagementRequest>({
-    resolver: zodResolver(engagementSchema),
+    resolver: zodResolver(EngagementSchema),
   })
-
-  const addClick = () => {
-    setIsAdding(!isAdding)
-  }
 
   const onSubmit = (data: EngagementRequest) => {
     try {
@@ -59,7 +45,6 @@ const EngagementAddDialog: FC = () => {
         variant: "success",
       })
 
-      setIsAdding(false)
       reset()
     } catch (error) {
       toast({
@@ -72,7 +57,7 @@ const EngagementAddDialog: FC = () => {
 
   return (
     <Dialog>
-      <DialogTrigger onClick={addClick}>
+      <DialogTrigger>
         <Button variant="ghost" size="icon">
           <Plus />
         </Button>
@@ -125,4 +110,4 @@ const EngagementAddDialog: FC = () => {
   )
 }
 
-export default EngagementAddDialog
+export { EngagementAddDialog }

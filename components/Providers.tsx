@@ -1,12 +1,12 @@
 "use client"
 
-import * as React from "react"
+import type { FC } from "react"
 import { ThemeProvider } from "next-themes"
-import { type ThemeProviderProps } from "next-themes/dist/types"
+import type { ThemeProviderProps } from "next-themes/dist/types"
 
 import { TooltipProvider } from "@/components/ui/Tooltip"
 
-export function Providers({ children, ...props }: ThemeProviderProps) {
+const Providers: FC<ThemeProviderProps> = ({ children, ...props }) => {
   return (
     <ThemeProvider {...props}>
       <TooltipProvider delayDuration={0} skipDelayDuration={500}>
@@ -15,3 +15,5 @@ export function Providers({ children, ...props }: ThemeProviderProps) {
     </ThemeProvider>
   )
 }
+
+export { Providers }

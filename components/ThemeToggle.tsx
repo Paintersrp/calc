@@ -1,13 +1,13 @@
 "use client"
 
-import * as React from "react"
+import type { FC } from "react"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { Button } from "@/components/ui/Button"
 import { TooltipWrapper } from "@/components/TooltipWrapper"
 
-export function ThemeToggle() {
+const ThemeToggle: FC = () => {
   const { setTheme, theme } = useTheme()
 
   return (
@@ -24,3 +24,5 @@ export function ThemeToggle() {
     </TooltipWrapper>
   )
 }
+
+export { ThemeToggle }

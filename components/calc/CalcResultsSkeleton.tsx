@@ -32,4 +32,4 @@ const CalcResultsSkeleton: FC = () => {
   )
 }
 
-export default CalcResultsSkeleton
+export { CalcResultsSkeleton }

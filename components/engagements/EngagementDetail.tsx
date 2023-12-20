@@ -4,15 +4,16 @@ import type { FC } from "react"
 import { format } from "date-fns"
 
 import { useEngagements } from "@/lib/state/engagements"
-import { toast } from "@/hooks/use-toast"
+import { toast } from "@/hooks/useToast"
 import { Button } from "@/components/ui/Button"
 import { Separator } from "@/components/ui/Separator"
 
-import { Icons } from "../Icons"
+import { TooltipWrapper } from "../TooltipWrapper"
+import { EngagementDeleteDialog } from "./EngagementDeleteDialog"
+import { EngagementDetailForm } from "./EngagementDetailForm"
 
 const EngagementDetail: FC = () => {
-  const { selected, setSelected, markAsDone, undoMarkAsDone, deleteEngagement, deleteFromHistory } =
-    useEngagements()
+  const { selected, setSelected, markAsDone, undoMarkAsDone } = useEngagements()
 
   if (!selected) {
     return (
@@ -22,6 +23,7 @@ const EngagementDetail: FC = () => {
       </div>
     )
   }
+
   // Function to handle copying engagement details
   const handleCopyDetails = () => {
     const details = `Title: ${selected.title}\nDescription: ${selected.description}\nDate: ${selected.date}\nType: ${selected.type}`
@@ -56,30 +58,16 @@ const EngagementDetail: FC = () => {
     })
   }
 
-  const handleDelete = (id: string) => {
-    if (selected.status === "active") {
-      deleteEngagement(id)
-    } else {
-      deleteFromHistory(id)
-    }
-
-    setSelected(null)
-
-    toast({
-      title: "Engagement successfully deleted!",
-      description: "Engagement has been deleted and removed from history.",
-      variant: "destructive",
-    })
-  }
-
   return (
     <div>
       <div className="flex sm:flex-row flex-col sm:items-center items-start gap-2 justify-between">
-        <h1 className="text-2xl font-medium">Engagement Details</h1>
+        <div>
+          <h1 className="text-2xl font-medium">Engagement Details</h1>
+          <p className="dark:text-blue-400 text-blue-600 dark:font-semibold font-medium text-[0.925rem]">
+            {format(selected.date, "MMMM d, yyyy hh:mm b")}
+          </p>
+        </div>
         <div className="flex space-x-2 justify-end items-end">
-          <Button onClick={handleCopyDetails} variant="accent">
-            Copy Details
-          </Button>
           {selected.status === "active" ? (
             <Button onClick={() => handleMarkAsDone(selected.id)} variant="destructive">
               Mark Done
@@ -89,53 +77,20 @@ const EngagementDetail: FC = () => {
               Undo Mark Done
             </Button>
           )}
+          <Button onClick={handleCopyDetails} variant="accent">
+            Copy Details
+          </Button>
+          <Button type="submit" variant="success" form="update-form">
+            Save Changes
+          </Button>
         </div>
       </div>
       <Separator className="!my-4 dark:bg-slate-700 bg-slate-300" />
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <h2 className="text-xl dark:font-semibold font-medium dark:text-blue-400 text-blue-600">
-            Title
-          </h2>
-          <p className="mb-3">{selected.title}</p>
-        </div>
-        <div>
-          <h2 className="text-xl dark:font-semibold font-medium dark:text-blue-400 text-blue-600">
-            Associate Login
-          </h2>
-          <p className="mb-3">{selected.login}</p>
-        </div>
-        <div>
-          <h2 className="text-xl dark:font-semibold font-medium dark:text-blue-400 text-blue-600">
-            Date
-          </h2>
-
-          <p className="mb-3">{format(selected.date, "MMMM d, yyyy hh:mm b")}</p>
-        </div>
-        <div>
-          <h2 className="text-xl dark:font-semibold font-medium dark:text-blue-400 text-blue-600">
-            Type
-          </h2>
-          <p className="mb-3">{selected.type}</p>
-        </div>
-        <div className="col-span-2">
-          <h2 className="text-xl dark:font-semibold font-medium dark:text-blue-400 text-blue-600">
-            Description
-          </h2>
-          <p className="mb-3">{selected.description}</p>
-        </div>
-      </div>
-      <div className="flex w-full justify-end">
-        <Button
-          size="icon"
-          variant="ghost"
-          onClick={(e) => {
-            e.stopPropagation()
-            handleDelete(selected.id)
-          }}
-        >
-          <Icons.delete className="h-5 w-5 text-red-500" />
-        </Button>
+      <EngagementDetailForm selected={selected} />
+      <div className="flex w-full justify-end mt-4">
+        <TooltipWrapper content="Delete engagement">
+          <EngagementDeleteDialog status={selected.status} id={selected.id} />
+        </TooltipWrapper>
       </div>
     </div>
   )
