@@ -293,7 +293,7 @@ const useEngagements = create(
           const engagementIndex = state.engagements.findIndex((e) => e.id === id)
           if (engagementIndex === -1) return state
 
-          const updatedEngagement = { ...state.engagements[engagementIndex], status: "done" }
+          const updatedEngagement = { ...state.engagements[engagementIndex], status: "followUp" }
           const newEngagements = state.engagements.filter((e, index) => index !== engagementIndex)
           const newFollowUps = [updatedEngagement, ...state.followUpEngagements]
 
