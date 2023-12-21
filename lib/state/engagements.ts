@@ -4,13 +4,17 @@ import { persist } from "zustand/middleware"
 
 export interface Engagement {
   id: string
-  title: string
-  description: string
   date: string
-  type: string
-  login: string
   status: string
+  associate: string
+  type: string
+  notes?: string
 }
+
+export type EngagementSelect = (id: string | null) => void
+export type UpdatableEngagement = Omit<Engagement, "id" | "date" | "status">
+export type EngagementUpdateAction = (id: string, data: UpdatableEngagement) => void
+export type EngagementAction = (id: string) => void
 
 interface EngagementState {
   engagements: Engagement[]
@@ -18,26 +22,28 @@ interface EngagementState {
   followUpEngagements: Engagement[]
 
   selected: Engagement | null
-  setSelected: (id: string | null) => void
-  setSelectedFromHistory: (id: string | null) => void
-  setSelectedFromFollowUp: (id: string | null) => void
+  setSelected: EngagementSelect
+  setSelectedFromHistory: EngagementSelect
+  setSelectedFromFollowUp: EngagementSelect
 
-  addEngagement: (engagementData: Omit<Engagement, "id" | "date" | "status">) => void
+  addEngagement: (engagementData: UpdatableEngagement) => string
 
-  updateEngagement: (id: string, data: Omit<Engagement, "id" | "date" | "status">) => void
-  updateEngagementHistory: (id: string, data: Omit<Engagement, "id" | "date" | "status">) => void
-  updateFollowUpEngagement: (id: string, data: Omit<Engagement, "id" | "date" | "status">) => void
+  updateEngagement: EngagementUpdateAction
+  updateEngagementHistory: EngagementUpdateAction
+  updateFollowUpEngagement: EngagementUpdateAction
 
-  deleteFromFollowUp: (id: string) => void
-  deleteEngagement: (id: string) => void
-  deleteFromHistory: (id: string) => void
+  deleteFromFollowUp: EngagementAction
+  deleteEngagement: EngagementAction
+  deleteFromHistory: EngagementAction
 
-  markAsDone: (id: string) => void
-  undoMarkAsDone: (id: string) => void
-  markFollowUpAsDone: (id: string) => void
-  undoMarkFollowUpAsDone: (id: string) => void
+  markAsDone: EngagementAction
+  undoMarkAsDone: EngagementAction
+  markFollowUpAsDone: EngagementAction
+  undoMarkFollowUpAsDone: EngagementAction
 
-  markAsFollowUp: (id: string) => void
+  markAsFollowUp: EngagementAction
+  markAsFollowUpFromHistory: EngagementAction
+  undoMarkAsFollowUp: EngagementAction
 
   getEngagement: (id: string) => Engagement | undefined
 }
@@ -55,34 +61,31 @@ const useEngagements = create(
       followUpEngagements: [
         {
           id: nanoid(10),
-          title: "Team Strategy Meeting",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eros odio, dictum nec elementum id, tristique eu neque. Duis nisl tellus, lacinia quis euismod ut, blandit in augue. Nunc at tortor posuere, laoreet nisi quis, mollis metus. Proin sed erat. ",
           date: "2023-01-15T09:00:00.000Z",
+          status: "followUp",
+          associate: "manager",
           type: "Meeting",
-          login: "manager",
-          status: "active",
+          notes:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eros odio, dictum nec elementum id, tristique eu neque. Duis nisl tellus, lacinia quis euismod ut, blandit in augue. Nunc at tortor posuere, laoreet nisi quis, mollis metus. Proin sed erat. ",
         },
 
         {
           id: nanoid(10),
-          title: "Meeting with Team",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras eu lorem ut odio sodales cursus vitae vel eros. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Maecenas quam urna, condimentum at congue sed, consectetur at. ",
           date: new Date().toISOString(),
+          status: "followUp",
+          associate: "user1",
           type: "Meeting",
-          login: "user1",
-          status: "active",
+          notes:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras eu lorem ut odio sodales cursus vitae vel eros. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Maecenas quam urna, condimentum at congue sed, consectetur at. ",
         },
         {
           id: nanoid(10),
-          title: "Client Call",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tristique, sem ut ultrices lobortis, nisi justo pretium ipsum, sit amet eleifend mauris elit eu erat. Aenean est ipsum, placerat eget lobortis hendrerit, maximus eget neque. Fusce tempus tortor ex, venenatis.",
           date: new Date().toISOString(),
+          status: "followUp",
+          associate: "user2",
           type: "Call",
-          login: "user2",
-          status: "active",
+          notes:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tristique, sem ut ultrices lobortis, nisi justo pretium ipsum, sit amet eleifend mauris elit eu erat. Aenean est ipsum, placerat eget lobortis hendrerit, maximus eget neque. Fusce tempus tortor ex, venenatis.",
         },
       ],
 
@@ -122,6 +125,8 @@ const useEngagements = create(
           ...data,
         }
         set((state) => ({ engagements: [...state.engagements, newEngagement] }))
+
+        return newEngagement.id
       },
 
       // Update an existing engagement with the given data.
@@ -277,7 +282,7 @@ const useEngagements = create(
             status: "followUp",
           }
           const newHistory = state.engagementHistory.filter((e, index) => index !== engagementIndex)
-          const newFollowUps = [updatedEngagement, ...state.engagements]
+          const newFollowUps = [updatedEngagement, ...state.followUpEngagements]
 
           return {
             engagements: state.engagements,
@@ -296,6 +301,50 @@ const useEngagements = create(
           const updatedEngagement = { ...state.engagements[engagementIndex], status: "followUp" }
           const newEngagements = state.engagements.filter((e, index) => index !== engagementIndex)
           const newFollowUps = [updatedEngagement, ...state.followUpEngagements]
+
+          return {
+            engagements: newEngagements,
+            engagementHistory: state.engagementHistory,
+            followUpEngagements: newFollowUps,
+          }
+        })
+      },
+
+      // Moves an engagement from the history array to the follow up array
+      markAsFollowUpFromHistory: (id) => {
+        set((state) => {
+          const engagementIndex = state.engagementHistory.findIndex((e) => e.id === id)
+          if (engagementIndex === -1) return state
+
+          const updatedEngagement = {
+            ...state.engagementHistory[engagementIndex],
+            status: "followUp",
+          }
+          const newHistory = state.engagementHistory.filter((e, index) => index !== engagementIndex)
+          const newFollowUps = [updatedEngagement, ...state.followUpEngagements]
+
+          return {
+            engagements: state.engagements,
+            engagementHistory: newHistory,
+            followUpEngagements: newFollowUps,
+          }
+        })
+      },
+
+      // Moves an engagement from the follow up array to the active array
+      undoMarkAsFollowUp: (id) => {
+        set((state) => {
+          const engagementIndex = state.followUpEngagements.findIndex((e) => e.id === id)
+          if (engagementIndex === -1) return state
+
+          const updatedEngagement = {
+            ...state.followUpEngagements[engagementIndex],
+            status: "active",
+          }
+          const newFollowUps = state.followUpEngagements.filter(
+            (e, index) => index !== engagementIndex
+          )
+          const newEngagements = [updatedEngagement, ...state.engagements]
 
           return {
             engagements: newEngagements,

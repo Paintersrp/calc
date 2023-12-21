@@ -7,6 +7,7 @@ import { useEngagements } from "@/lib/state/engagements"
 import { toast } from "@/hooks/useToast"
 import { Button } from "@/components/ui/Button"
 import { Separator } from "@/components/ui/Separator"
+import { Text } from "@/components/ui/Text"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
 
 import { EngagementDeleteDialog } from "../EngagementDeleteDialog"
@@ -14,7 +15,7 @@ import { EngagementDetailForm } from "./EngagementDetailForm"
 import { EngagementDetailSkeleton } from "./EngagementDetailSkeleton"
 
 const EngagementDetail: FC = () => {
-  const { selected, setSelected, markAsDone, undoMarkAsDone } = useEngagements()
+  const { selected, setSelected, markAsDone, undoMarkAsDone, undoMarkAsFollowUp } = useEngagements()
 
   if (!selected) {
     return <EngagementDetailSkeleton />
@@ -22,7 +23,7 @@ const EngagementDetail: FC = () => {
 
   // Function to handle copying engagement details
   const handleCopyDetails = () => {
-    const details = `Title: ${selected.title}\nDescription: ${selected.description}\nDate: ${selected.date}\nType: ${selected.type}`
+    const details = `\nDate: ${selected.date}Associate: ${selected.associate}\nType: ${selected.type}\nNotes: ${selected.notes}`
     navigator.clipboard.writeText(details)
 
     toast({
@@ -54,23 +55,38 @@ const EngagementDetail: FC = () => {
     })
   }
 
+  const handleUndoMarkAsFollowUp = (id: string) => {
+    undoMarkAsFollowUp(id)
+    setSelected(id)
+
+    toast({
+      title: "Engagement no longer requires follow up!",
+      description: "Engagement status has been adjusted from follow up to active.",
+      variant: "success",
+    })
+  }
+
   return (
     <div>
       <div className="flex sm:flex-row flex-col sm:items-center items-start gap-2 justify-between">
         <div>
-          <h1 className="text-2xl font-medium leading-none tracking-tight">Engagement Details</h1>
-          <p className="dark:text-blue-400 text-blue-600 dark:font-semibold font-medium text-[0.925rem]">
+          <Text type="h3">Engagement Details</Text>
+          <Text size="xs" variant="blue" className="dark:font-semibold font-medium">
             {format(selected.date, "MMMM d, yyyy hh:mm b")}
-          </p>
+          </Text>
         </div>
         <div className="flex space-x-2 justify-end items-end">
           {selected.status === "active" ? (
             <Button onClick={() => handleMarkAsDone(selected.id)} variant="destructive">
               Mark Done
             </Button>
-          ) : (
+          ) : selected.status === "done" ? (
             <Button onClick={() => handleUndoMarkAsDone(selected.id)} variant="destructive">
               Undo Mark Done
+            </Button>
+          ) : (
+            <Button onClick={() => handleUndoMarkAsFollowUp(selected.id)} variant="destructive">
+              Undo Follow Up
             </Button>
           )}
           <Button onClick={handleCopyDetails} variant="accent">

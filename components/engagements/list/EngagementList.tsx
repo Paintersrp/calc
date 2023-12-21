@@ -4,9 +4,9 @@ import { type FC } from "react"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs"
 
-import { EngagementActiveList } from "./EngagementActiveList"
-import { EngagementFollowUpList } from "./EngagementFollowUpList"
-import { EngagementHistoryList } from "./EngagementHistoryList"
+import { ActiveList } from "./ActiveList"
+import { FollowUpList } from "./FollowUpList"
+import { HistoryList } from "./HistoryList"
 
 const EngagementList: FC = () => {
   return (
@@ -17,13 +17,13 @@ const EngagementList: FC = () => {
         <TabsTrigger value="history">Historical</TabsTrigger>
       </TabsList>
       <TabsContent value="active">
-        <EngagementActiveList />
+        <ActiveList />
       </TabsContent>
       <TabsContent value="followUp">
-        <EngagementFollowUpList />
+        <FollowUpList />
       </TabsContent>
       <TabsContent value="history">
-        <EngagementHistoryList />
+        <HistoryList />
       </TabsContent>
     </Tabs>
   )

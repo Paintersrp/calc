@@ -18,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/Table"
+import { Text } from "@/components/ui/Text"
 
 import { CalcResultsSkeleton } from "./CalcResultsSkeleton"
 
@@ -43,11 +44,11 @@ const CalcResults: FC = () => {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-medium">Calculation Results</h1>
+      <Text type="h3">Calculation Results</Text>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div className="p-4 dark:bg-slate-800 bg-slate-400 rounded-lg">
-          <p className="text-md font-medium ">
+          <p className="text-base font-medium">
             Adjusted Rate
             <span className="block font-semibold text-amber-300">
               {requiredRate.toFixed(2)} UPH

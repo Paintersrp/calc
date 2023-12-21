@@ -6,6 +6,7 @@ import { useEngagements, type Engagement } from "@/lib/state/engagements"
 import { EngagementRequest, EngagementSchema } from "@/lib/validators/engagement"
 import { toast } from "@/hooks/useToast"
 import { Input } from "@/components/ui/Input"
+import { Text } from "@/components/ui/Text"
 import { Textarea } from "@/components/ui/Textarea"
 
 interface EngagementDetailFormProps {
@@ -72,36 +73,47 @@ const EngagementDetailForm: FC<EngagementDetailFormProps> = ({ selected }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4" id="update-form">
       <div>
-        <h2 className="mb-1 text-base dark:font-semibold font-medium dark:text-blue-400 text-blue-600">
-          Title
-        </h2>
-        <Input className="dark:text-white text-black text-[0.925rem]" {...register("title")} />
-        {errors.title && <p>{errors.title.message}</p>}
-      </div>
-      <div>
-        <h2 className="mb-1 text-base dark:font-semibold font-medium dark:text-blue-400 text-blue-600">
+        <Text variant="blue" className="mb-1 dark:font-semibold font-medium">
           Associate Login
-        </h2>
-        <Input className="dark:text-white text-black text-[0.925rem]" {...register("login")} />
-        {errors.login && <p>{errors.login.message}</p>}
+        </Text>
+
+        <Input className="dark:text-white text-black text-[0.925rem]" {...register("associate")} />
+
+        {errors.associate && (
+          <Text variant="red" size="sm" className="font-semibold">
+            {errors.associate.message}
+          </Text>
+        )}
       </div>
       <div>
-        <h2 className="mb-1 text-base dark:font-semibold font-medium dark:text-blue-400 text-blue-600">
+        <Text variant="blue" className="mb-1 dark:font-semibold font-medium">
           Type
-        </h2>
+        </Text>
+
         <Input className="dark:text-white text-black text-[0.925rem]" {...register("type")} />
-        {errors.type && <p>{errors.type.message}</p>}
+
+        {errors.type && (
+          <Text variant="red" size="sm" className="font-semibold">
+            {errors.type.message}
+          </Text>
+        )}
       </div>
       <div className="col-span-2">
-        <h2 className="mb-1 text-base dark:font-semibold font-medium dark:text-blue-400 text-blue-600">
-          Description
-        </h2>
+        <Text variant="blue" className="mb-1 dark:font-semibold font-medium">
+          Notes
+        </Text>
+
         <Textarea
           className="dark:text-white text-black text-[0.925rem]"
           rows={6}
-          {...register("description")}
+          {...register("notes")}
         />
-        {errors.description && <p>{errors.description.message}</p>}
+
+        {errors.notes && (
+          <Text variant="red" size="sm" className="font-semibold">
+            {errors.notes.message}
+          </Text>
+        )}
       </div>
     </form>
   )

@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/Select"
+import { Text } from "@/components/ui/Text"
 
 const CalcDailyConfig: FC = () => {
   const {
@@ -126,7 +127,7 @@ const CalcDailyConfig: FC = () => {
           )}
         </div>
       </div>
-      <h1 className="text-2xl pt-6 font-semibold">Current Associate Values</h1>
+      <Text type="h3">Current Associate Values</Text>
       <div className="flex-col flex items-center gap-4">
         <div className="w-full space-y-1.5">
           <Label htmlFor="currentRate" className="font-semibold text-base">

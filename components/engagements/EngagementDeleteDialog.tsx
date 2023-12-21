@@ -1,6 +1,6 @@
 "use client"
 
-import type { FC } from "react"
+import type { FC, ReactNode } from "react"
 
 import { useEngagements } from "@/lib/state/engagements"
 import { toast } from "@/hooks/useToast"
@@ -20,9 +20,10 @@ import { Icons } from "@/components/Icons"
 interface EngagementDeleteDialogProps {
   status: string
   id: string
+  children?: ReactNode
 }
 
-const EngagementDeleteDialog: FC<EngagementDeleteDialogProps> = ({ status, id }) => {
+const EngagementDeleteDialog: FC<EngagementDeleteDialogProps> = ({ status, id, children }) => {
   const { setSelected, deleteEngagement, deleteFromHistory, deleteFromFollowUp } = useEngagements()
 
   const handleDelete = () => {
@@ -46,17 +47,21 @@ const EngagementDeleteDialog: FC<EngagementDeleteDialogProps> = ({ status, id })
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          size="iconSm"
-          className="dark:hover:!bg-slate-700 hover:!bg-slate-300"
-          onClick={(e) => {
-            e.stopPropagation()
-          }}
-        >
-          <Icons.delete className="h-4 w-4 text-red-500" />
-          <span className="sr-only">Delete engagement</span>
-        </Button>
+        {children ? (
+          children
+        ) : (
+          <Button
+            variant="ghost"
+            size="iconSm"
+            className="dark:hover:!bg-slate-700 hover:!bg-slate-300"
+            onClick={(e) => {
+              e.stopPropagation()
+            }}
+          >
+            <Icons.delete className={`h-4 w-4 text-red-500`} />
+            <span className="sr-only">Delete engagement</span>
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

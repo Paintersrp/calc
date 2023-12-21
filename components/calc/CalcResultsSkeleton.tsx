@@ -1,11 +1,12 @@
 import type { FC } from "react"
 
 import { Skeleton } from "@/components/ui/Skeleton"
+import { Text } from "@/components/ui/Text"
 
 const CalcResultsSkeleton: FC = () => {
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-semibold ">Calculation Results</h1>
+      <Text type="h3">Calculation Results</Text>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Skeleton className="p-4 rounded-lg h-20 dark:bg-slate-800 bg-slate-400" />

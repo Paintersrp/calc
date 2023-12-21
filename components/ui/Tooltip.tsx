@@ -29,7 +29,7 @@ TooltipContent.displayName = TooltipPrimitive.Content.displayName
 
 interface TooltipWrapperProps {
   children: React.ReactNode
-  content: string
+  content: string | React.ReactNode
 }
 
 const TooltipWrapper: React.FC<TooltipWrapperProps> = ({ children, content }) => {

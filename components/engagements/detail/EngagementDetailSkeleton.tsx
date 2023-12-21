@@ -32,12 +32,8 @@ const EngagementDetailSkeleton: FC = () => {
           <Skeleton className="h-6 w-[15%] mb-2 rounded-md" />
           <Skeleton className="h-8 w-full mb-2 rounded-md" />
         </div>
-        <div>
-          <Skeleton className="h-6 w-[15%] mb-2 rounded-md" />
-          <Skeleton className="h-8 w-full mb-2 rounded-md" />
-        </div>
         <div className="col-span-2">
-          <Skeleton className="h-6 w-[15%] mb-2 rounded-md" />
+          <Skeleton className="h-6 w-[7.5%] mb-2 rounded-md" />
           <Skeleton className="h-40 w-full rounded-md" />
         </div>
       </div>

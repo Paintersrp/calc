@@ -1,10 +1,9 @@
 import { z } from "zod"
 
 export const EngagementSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string().min(1, "Description is required"),
+  associate: z.string().min(1, "Associate is required"),
   type: z.string().min(1, "Type is required"),
-  login: z.string().min(1, "Login is required"),
+  notes: z.string().optional(),
 })
 
 export type EngagementRequest = z.infer<typeof EngagementSchema>

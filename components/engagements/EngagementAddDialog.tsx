@@ -1,6 +1,6 @@
 "use client"
 
-import { type FC } from "react"
+import { useEffect, useState, type FC } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -20,11 +20,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/Dialog"
 import { Input } from "@/components/ui/Input"
-import { Label } from "@/components/ui/Label"
 import { Textarea } from "@/components/ui/Textarea"
 
+import { Text } from "../ui/Text"
+import { TooltipWrapper } from "../ui/Tooltip"
+
 const EngagementAddDialog: FC = () => {
-  const { addEngagement } = useEngagements()
+  const { addEngagement, setSelected } = useEngagements()
+  const [open, setOpen] = useState(false)
 
   const {
     register,
@@ -37,13 +40,15 @@ const EngagementAddDialog: FC = () => {
 
   const onSubmit = (data: EngagementRequest) => {
     try {
-      addEngagement({ ...data })
+      const newEnagementId = addEngagement({ ...data })
 
       toast({
         title: "Engagement Added",
         description: "The engagement has been successfully added.",
         variant: "success",
       })
+
+      setSelected(newEnagementId)
 
       reset()
     } catch (error) {
@@ -55,12 +60,56 @@ const EngagementAddDialog: FC = () => {
     }
   }
 
+  const toggleOpen = () => {
+    setOpen(!open)
+  }
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.ctrlKey && event.key === "q") {
+      event.preventDefault()
+      toggleOpen()
+    }
+  }
+
+  useEffect(() => {
+    if (Object.keys(errors).length > 0) {
+      toast({
+        title: "Error Adding Engagement",
+        description: "There was an issue adding the engagement. Please try again.",
+        variant: "destructive",
+      })
+    }
+  }, [errors])
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown)
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={toggleOpen}>
       <DialogTrigger>
-        <Button variant="ghost" size="icon">
-          <Plus />
-        </Button>
+        <TooltipWrapper
+          content={
+            <>
+              <Text className="font-medium">Add new engagement</Text>
+              <Text className="font-medium">
+                <kbd className="rounded-md border bg-accent px-1 py-0.5 text-sm font-bold">
+                  CTRL-Q
+                </kbd>{" "}
+                to open with shortcut
+              </Text>
+            </>
+          }
+        >
+          <Button variant="ghost" size="icon">
+            <Plus />
+          </Button>
+        </TooltipWrapper>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -71,29 +120,44 @@ const EngagementAddDialog: FC = () => {
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
+          {/* Associate Login Input  */}
           <div className="space-y-1">
-            <Label>Title:</Label>
-            <Input {...register("title")} />
-            {errors.title && <p>{errors.title.message}</p>}
+            <Text className="mb-1 dark:font-semibold font-medium">
+              Associate Login<span className="ml-[0.1rem]">*</span>
+            </Text>
+
+            <Input {...register("associate")} />
+            {errors.associate && (
+              <Text variant="red" size="sm" className="font-semibold">
+                {errors.associate.message}
+              </Text>
+            )}
           </div>
 
+          {/* Engagement Type Input  */}
           <div className="space-y-1">
-            <Label>Type:</Label>
+            <Text className="mb-1 dark:font-semibold font-medium">
+              Type<span className="ml-[0.1rem]">*</span>
+            </Text>
             <Input {...register("type")} />
-            {errors.type && <p>{errors.type.message}</p>}
+            {errors.type && (
+              <Text variant="red" size="sm" className="font-semibold">
+                {errors.type.message}
+              </Text>
+            )}
           </div>
 
+          {/* Engagement Notes Input  */}
           <div className="space-y-1">
-            <Label>Login:</Label>
-            <Input {...register("login")} />
-            {errors.login && <p>{errors.login.message}</p>}
+            <Text className="mb-1 dark:font-semibold font-medium">Notes</Text>
+            <Textarea rows={6} {...register("notes")} />
+            {errors.notes && (
+              <Text variant="red" size="sm" className="font-semibold">
+                {errors.notes.message}
+              </Text>
+            )}
           </div>
 
-          <div className="space-y-1">
-            <Label>Description:</Label>
-            <Textarea rows={6} {...register("description")} />
-            {errors.description && <p>{errors.description.message}</p>}
-          </div>
           <DialogFooter className="gap-2 sm:gap-0 justify-end md:justify-end pt-2">
             <DialogClose asChild>
               <Button type="button" variant="destructive" className="font-bold text-white">
@@ -101,7 +165,9 @@ const EngagementAddDialog: FC = () => {
               </Button>
             </DialogClose>
             <DialogClose asChild>
-              <Button type="submit">Add Engagement</Button>
+              <Button type="submit" onClick={(e) => e.stopPropagation()}>
+                Add Engagement
+              </Button>
             </DialogClose>
           </DialogFooter>
         </form>
