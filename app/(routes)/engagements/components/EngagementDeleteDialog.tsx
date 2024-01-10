@@ -58,7 +58,7 @@ const EngagementDeleteDialog: FC<EngagementDeleteDialogProps> = ({ status, id, c
               e.stopPropagation()
             }}
           >
-            <Icons.delete className={`h-4 w-4 text-red-500`} />
+            <Icons.Delete className={`h-4 w-4 text-red-500`} />
             <span className="sr-only">Delete engagement</span>
           </Button>
         )}
