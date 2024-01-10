@@ -7,6 +7,21 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function capitalize(str: string) {
+  if (!str || typeof str !== "string") return str
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
+export const truncate = (str: string, length: number) => {
+  if (!str || str.length <= length) return str
+  return `${str.slice(0, length)}...`
+}
+
+export const formatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+})
+
 const formatDistanceLocale = {
   lessThanXSeconds: "just now",
   xSeconds: "just now",
@@ -54,4 +69,30 @@ export function formatTimeToNow(date: Date): string {
       formatDistance,
     },
   })
+}
+
+export const formatDecimalHours = (decimalHours: number): string => {
+  let hours = Math.floor(decimalHours)
+  let minutes = Math.round((decimalHours - hours) * 60)
+
+  if (minutes === 60) {
+    hours += 1
+    minutes = 0
+  }
+
+  const formattedHours = `${hours}:${minutes.toString().padStart(2, "0")}`
+
+  return formattedHours
+}
+
+export const calculateRemainingHours = (endTime: string): number => {
+  const currentTime = new Date()
+  let endTimeToday = new Date(`${currentTime.toDateString()} ${endTime}`)
+
+  if (endTimeToday < currentTime) {
+    endTimeToday = new Date(endTimeToday.getTime() + 24 * 60 * 60 * 1000)
+  }
+
+  const differenceInMilliseconds = endTimeToday.getTime() - currentTime.getTime()
+  return differenceInMilliseconds / (1000 * 60 * 60)
 }

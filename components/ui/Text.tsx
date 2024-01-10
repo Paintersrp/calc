@@ -10,6 +10,7 @@ const textVariants = cva("", {
       blue: "dark:text-blue-400 text-blue-600",
       red: "dark:text-red-500 text-red-600",
       slate: "dark:text-slate-300 text-slate-600",
+      muted: "text-muted-foreground",
     },
     type: {
       h1: "scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl",

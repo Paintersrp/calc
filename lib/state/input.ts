@@ -1,7 +1,9 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
-import { formatDecimalHours } from "../format-hours"
+import { formatDecimalHours } from "@/lib/utils"
+
+import { IDBStorage } from "../idb"
 
 interface InputStore {
   currentRate: number
@@ -49,7 +51,7 @@ const useInputs = create(
     {
       // Persist in local storage, and utilize first if it exists otherwise use assigned defaults
       name: "input-storage",
-      getStorage: () => localStorage,
+      getStorage: () => IDBStorage,
     }
   )
 )

@@ -1,10 +1,9 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
-import { calculateRemainingHours } from "@/lib/hours-remaining"
-import { shiftEndTimes } from "@/lib/shift-times"
-
-import { formatDecimalHours } from "../format-hours"
+import { IDBStorage } from "@/lib/idb"
+import { shiftEndTimes } from "@/lib/rate"
+import { calculateRemainingHours, formatDecimalHours } from "@/lib/utils"
 
 interface ConfigStore {
   type: string
@@ -75,7 +74,7 @@ const useConfig = create(
     }),
     {
       name: "config-storage",
-      getStorage: () => localStorage,
+      getStorage: () => IDBStorage,
     }
   )
 )

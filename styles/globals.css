@@ -2,6 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
+:root {
+  height: 100%;
+}
+
+:root {
+  --transition-duration: 500ms;
+}
+
+.menu-icon {
+  transition: transform var(--transition-duration);
+}
+
+.menu-icon-top {
+  stroke-dasharray: 40 160;
+  transition: stroke-dashoffset var(--transition-duration);
+}
+
+.menu-icon-middle {
+  transform-origin: 50%;
+  transition: transform var(--transition-duration);
+}
+
+.menu-icon-bottom {
+  stroke-dasharray: 40 85;
+  transition: stroke-dashoffset var(--transition-duration);
+}
+
+.menu-open {
+  transform: rotate(45deg);
+}
+
+.menu-open .menu-icon-top,
+.menu-open .menu-icon-bottom {
+  stroke-dashoffset: -64px;
+}
+
+.menu-open .menu-icon-middle {
+  transform: rotate(90deg);
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -22,13 +64,13 @@
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 214.3 31.8% 91.4%;
+    --secondary-foreground: 240 5.9% 10%;
 
-    --accent: 218 60% 90%;
+    --accent: 210 40% 92.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
-    --destructive: 0 100% 44%;
+    --destructive: 0 100% 50%;
     --destructive-foreground: 210 40% 98%;
 
     --warning: 38 92% 50%;
@@ -49,17 +91,17 @@
     --background: 224 71% 4%;
     --foreground: 213 31% 91%;
 
-    --muted: 223 47% 11%;
-    --muted-foreground: 215.4 16.3% 56.9%;
+    --muted: 223 47% 22%;
+    --muted-foreground: 215.4 16.3% 90%;
 
-    --accent: 216 34% 20%;
+    --accent: 216 34% 17%;
     --accent-foreground: 210 40% 98%;
 
     --popover: 224 71% 4%;
     --popover-foreground: 215 20.2% 65.1%;
 
-    --border: 216 34% 17%;
-    --input: 216 34% 17%;
+    --border: 216 34% 20%;
+    --input: 216 34% 20%;
 
     --card: 224 71% 4%;
     --card-foreground: 213 31% 91%;
@@ -67,22 +109,22 @@
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 1.2%;
 
-    --secondary: 222.2 47.4% 11.2%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 216 34% 20%;
+    --secondary-foreground: 0 0% 98%;
 
-    --destructive: 0 63% 31%;
+    --destructive: 0 63% 50%;
     --destructive-foreground: 210 40% 98%;
 
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
-    --success: 120 39% 40%;
+    --success: 120 39% 47.5%;
     --success-foreground: 0 0% 98%;
 
-    --info: 209 100% 50%;
+    --info: 209 100% 55%;
     --info-foreground: 0 0% 100%;
 
-    --ring: 216 34% 17%;
+    --ring: 216 34% 20%;
 
     --radius: 0.5rem;
   }

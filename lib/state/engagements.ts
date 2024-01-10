@@ -2,6 +2,8 @@ import { nanoid } from "nanoid"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
+import { IDBStorage } from "../idb"
+
 export interface Engagement {
   id: string
   date: string
@@ -359,7 +361,7 @@ const useEngagements = create(
     }),
     {
       name: "engagement-storage",
-      getStorage: () => localStorage,
+      getStorage: () => IDBStorage,
     }
   )
 )
