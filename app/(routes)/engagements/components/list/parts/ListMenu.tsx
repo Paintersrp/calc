@@ -107,7 +107,7 @@ const ListMenu: FC<ListMenuMenuProps> = ({ engagement }) => {
               handleMarkAsFollowUp(engagement.id)
             }}
           >
-            <Icons.follow className="mr-2 h-4 w-4 text-warning font-bold" />
+            <Icons.Register className="mr-2 h-4 w-4 text-warning font-bold" />
             <Text className="font-medium">Move to follow ups</Text>
           </DropdownMenuItem>
         )}
@@ -120,7 +120,7 @@ const ListMenu: FC<ListMenuMenuProps> = ({ engagement }) => {
               handleUndoMarkAsFollowUp(engagement.id)
             }}
           >
-            <Icons.undo className="mr-2 h-4 w-4 text-warning" />
+            <Icons.Register className="mr-2 h-4 w-4 text-warning" />
             <Text className="font-medium">Undo as follow up</Text>
           </DropdownMenuItem>
         )}
@@ -133,7 +133,7 @@ const ListMenu: FC<ListMenuMenuProps> = ({ engagement }) => {
               handleMarkAsDone(engagement.id)
             }}
           >
-            <Icons.check className="mr-2 h-4 w-4 text-green-400" />
+            <Icons.Register className="mr-2 h-4 w-4 text-green-400" />
             <Text className="font-medium">Mark as done</Text>
           </DropdownMenuItem>
         ) : (
@@ -143,7 +143,7 @@ const ListMenu: FC<ListMenuMenuProps> = ({ engagement }) => {
               handleUndoMarkAsDone(engagement.id)
             }}
           >
-            <Icons.undo className="mr-2 h-4 w-4 text-green-400" />
+            <Icons.Register className="mr-2 h-4 w-4 text-green-400" />
             <Text className="font-medium">Undo mark as done</Text>
           </DropdownMenuItem>
         )}
@@ -157,7 +157,7 @@ const ListMenu: FC<ListMenuMenuProps> = ({ engagement }) => {
               e.stopPropagation()
             }}
           >
-            <Icons.delete className="mr-2 h-4 w-4 text-red-500" />
+            <Icons.Delete className="mr-2 h-4 w-4 text-red-500" />
             <Text className="font-medium">Delete engagement</Text>
           </Button>
         </EngagementDeleteDialog>
