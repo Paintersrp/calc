@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/Separator"
 
-import { SettingsSidebar } from "./components/SettingsSidebar"
+import { SettingsSidebar } from "./(routes)/(root)/components/SettingsSidebar"
 
 interface SettingsLayoutProps {
   children: React.ReactNode
@@ -27,6 +27,10 @@ const navItems = [
     title: "Roles",
     href: "/settings/roles",
   },
+  {
+    title: "Valleys",
+    href: "/settings/valleys",
+  },
 ]
 
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
@@ -34,7 +38,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
     <section className="px-4 sm:container gap-6 pb-4 sm:pb-8 md:py-6 space-y-4">
       <div className="flex items-center justify-between">
         <div className="space-y-0.5">
-          <h2 className="text-2xl font-bold tracking-tight">Manage Settings</h2>
+          <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
           <p className="text-muted-foreground">View and manage application and table settings</p>
         </div>
       </div>

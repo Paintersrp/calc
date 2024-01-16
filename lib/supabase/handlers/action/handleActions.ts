@@ -123,6 +123,7 @@ const handleActions = <T extends Record<string, any>>({
           .from(tableName)
           .select(select)
           .eq("id", id)
+          .returns<T[]>()
           .single()
 
         if (error) throw error

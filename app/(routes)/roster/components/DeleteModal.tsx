@@ -39,7 +39,7 @@ const DeleteModal: FC<DeleteModalProps> = ({ onConfirm, isLoading, open, onClose
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Are you sure you want to delete this shop?</DialogTitle>
-          <DialogDescription className="">This action cannot be undone.</DialogDescription>
+          <DialogDescription>This action cannot be undone.</DialogDescription>
         </DialogHeader>
         <DialogFooter className="gap-2 sm:gap-0 justify-end md:justify-end">
           <DialogClose asChild>

@@ -1,7 +1,20 @@
 "use client"
 
-import { ReactNode } from "react"
-import { flexRender, type ColumnDef, type Table as TableType } from "@tanstack/react-table"
+import { useState } from "react"
+import {
+  flexRender,
+  getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type SortingState,
+  type VisibilityState,
+} from "@tanstack/react-table"
 
 import {
   Table,
@@ -13,21 +26,55 @@ import {
 } from "@/components/ui/Table"
 
 import { DataTablePagination } from "./DataTablePagination"
+import { DataTableToolbar } from "./DataTableToolbar"
 
 interface DataTableProps<TData, TValue> {
-  table: TableType<any>
   columns: (ColumnDef<TData, TValue> & { visibility: boolean; accessorKey?: string })[]
-  toolbar: ReactNode
+  data: TData[]
+  filterKey: string
 }
 
 export function DataTable<TData, TValue>({
-  table,
   columns,
-  toolbar,
+  data,
+  filterKey,
 }: DataTableProps<TData, TValue>) {
+  const [rowSelection, setRowSelection] = useState({})
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [sorting, setSorting] = useState<SortingState>([])
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: {
+      sorting,
+      columnVisibility,
+      rowSelection,
+      columnFilters,
+    },
+    initialState: {
+      pagination: {
+        pageIndex: 0,
+        pageSize: 15,
+      },
+    },
+    enableRowSelection: true,
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+  })
+
   return (
     <div className="space-y-4">
-      {toolbar && toolbar}
+      <DataTableToolbar filterKey={filterKey} table={table} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

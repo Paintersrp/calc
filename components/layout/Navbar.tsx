@@ -1,3 +1,5 @@
+// Unused Component
+
 "use client"
 
 import { useState, type FC } from "react"
@@ -20,6 +22,21 @@ const Navbar: FC = () => {
       id: "roster",
       title: "Roster",
       href: "/roster",
+    },
+    {
+      id: "headcount",
+      title: "Headcount",
+      href: "/headcount",
+    },
+    {
+      id: "valleys",
+      title: "Valleys",
+      href: "/valleys",
+    },
+    {
+      id: "stations",
+      title: "Stations",
+      href: "/stations",
     },
     {
       id: "settings",

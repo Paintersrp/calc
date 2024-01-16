@@ -25,14 +25,6 @@ const buttonVariants = cva(
           text-primary-foreground 
           hover:bg-primary/90
         `,
-        destructive: `
-          hover:bg-destructive 
-          hover:text-destructive-foreground 
-          bg-transparent
-          text-destructive
-          transition-all
-          duration-300
-        `,
         slate: `
           dark:bg-slate-700 
           bg-slate-400 
@@ -62,7 +54,25 @@ const buttonVariants = cva(
           dark:hover:bg-accent/80 
           hover:bg-accent/80
         `,
+        destructive: `
+          bg-destructive 
+          text-destructive-foreground 
+          hover:bg-destructive/80
+        `,
+        destructiveInvert: `
+          hover:bg-destructive 
+          hover:text-destructive-foreground 
+          bg-transparent
+          text-destructive
+          transition-all
+          duration-300
+        `,
         success: `
+          bg-success 
+          text-success-foreground 
+          hover:bg-success/90
+        `,
+        successInvert: `
           hover:bg-success 
           hover:text-success-foreground 
           bg-transparent
@@ -70,12 +80,12 @@ const buttonVariants = cva(
           transition-all
           duration-300
         `,
-        warning: `
+        warningInvert: `
           bg-warning 
           text-warning-foreground 
           hover:bg-warning/90
         `,
-        info: `
+        infoInvert: `
           hover:bg-info 
           hover:text-info-foreground 
           bg-transparent

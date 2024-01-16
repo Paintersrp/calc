@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import { FullDateData } from "@/actions/plans"
 import axios from "axios"
 import { format } from "date-fns"
-import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
 
 import { Separator } from "@/components/ui/Separator"
@@ -62,10 +61,6 @@ export default function Page() {
       </div>
 
       <Separator />
-
-      {/* <pre className="mt-2 w-[340px] rounded-md p-4">
-        <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-      </pre> */}
 
       {data && data.plans && !loading && (
         <Tabs defaultValue="0">

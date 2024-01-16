@@ -10,7 +10,7 @@ import { RosterAddModal } from "./components/RosterAddModal"
 import { RosterColumns } from "./components/RosterColumns"
 import { RosterTable } from "./components/RosterTable"
 
-export default async function Page() {
+const RosterPage = async () => {
   const roster = await getAssociates(
     `*, 
     associates_roles (*, roles (*)),
@@ -55,21 +55,21 @@ export default async function Page() {
   }
 
   return (
-    <>
-      <section className="px-4 sm:container gap-6 pb-4 sm:pb-8 md:py-6 space-y-4">
-        <div className="flex items-center justify-between">
-          <Heading title="Manage Roster" description="View and manage roster entries" />
-          {/* <AddButton /> */}
-          <RosterAddModal options={options} />
-        </div>
-        <Separator />
-        <RosterTable
-          columns={RosterColumns}
-          data={formattedRoster}
-          options={options}
-          filterKey="login"
-        />
-      </section>
-    </>
+    <section className="px-4 sm:container gap-6 pb-4 sm:pb-8 md:py-6 space-y-4">
+      <div className="flex items-center justify-between">
+        <Heading title="Manage Roster" description="View and manage roster entries" />
+        {/* <AddButton /> */}
+        <RosterAddModal options={options} />
+      </div>
+      <Separator />
+      <RosterTable
+        columns={RosterColumns}
+        data={formattedRoster}
+        options={options}
+        filterKey="login"
+      />
+    </section>
   )
 }
+
+export default RosterPage

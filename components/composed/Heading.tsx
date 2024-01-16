@@ -1,16 +1,22 @@
 import type { FC } from "react"
 
+import { cn } from "@/lib/utils"
+
 interface HeadingProps {
   title: string
-  description: string
+  description?: string
   className?: string
+  titleClass?: string
+  descClass?: string
 }
 
-const Heading: FC<HeadingProps> = ({ title, description, className }) => {
+const Heading: FC<HeadingProps> = ({ title, description, className, titleClass, descClass }) => {
   return (
     <div className={className}>
-      <h2 className="text-3xl font-bold tracking-tight">{title}</h2>
-      <p className="text-sm text-muted-foreground">{description}</p>
+      <h2 className={cn("text-3xl font-bold tracking-tight", titleClass)}>{title}</h2>
+      {description && (
+        <p className={cn("text-sm text-muted-foreground", descClass)}>{description}</p>
+      )}
     </div>
   )
 }

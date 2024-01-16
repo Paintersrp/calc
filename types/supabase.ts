@@ -290,6 +290,24 @@ export interface Database {
         }
         Relationships: []
       }
+      quarters: {
+        Row: {
+          created_at: string
+          id: number
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
       roles: {
         Row: {
           created_at: string
@@ -343,15 +361,154 @@ export interface Database {
         }
         Relationships: []
       }
+      stations: {
+        Row: {
+          broadcast_open: boolean
+          created_at: string
+          id: number
+          name: string
+          status: Database["public"]["Enums"]["station_statuses"]
+          updated_at: string | null
+          valley_id: number
+        }
+        Insert: {
+          broadcast_open?: boolean
+          created_at?: string
+          id?: number
+          name: string
+          status?: Database["public"]["Enums"]["station_statuses"]
+          updated_at?: string | null
+          valley_id: number
+        }
+        Update: {
+          broadcast_open?: boolean
+          created_at?: string
+          id?: number
+          name?: string
+          status?: Database["public"]["Enums"]["station_statuses"]
+          updated_at?: string | null
+          valley_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stations_valley_id_fkey"
+            columns: ["valley_id"]
+            isOneToOne: false
+            referencedRelation: "valleys"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      valley_counts: {
+        Row: {
+          count: number | null
+          created_at: string
+          id: number
+          quarter_id: number
+          updated_at: string | null
+          valley_id: number
+        }
+        Insert: {
+          count?: number | null
+          created_at?: string
+          id?: number
+          quarter_id: number
+          updated_at?: string | null
+          valley_id: number
+        }
+        Update: {
+          count?: number | null
+          created_at?: string
+          id?: number
+          quarter_id?: number
+          updated_at?: string | null
+          valley_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "valley_counts_quarter_id_fkey"
+            columns: ["quarter_id"]
+            isOneToOne: false
+            referencedRelation: "quarters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "valley_counts_valley_id_fkey"
+            columns: ["valley_id"]
+            isOneToOne: false
+            referencedRelation: "valleys"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      valley_groups: {
+        Row: {
+          created_at: string
+          id: number
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      valleys: {
+        Row: {
+          created_at: string
+          group_id: number
+          id: number
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          group_id: number
+          id?: number
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          group_id?: number
+          id?: number
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "valleys_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "valley_groups"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_triggers_and_columns: {
+        Args: {
+          tables_to_update: string[]
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       "shift-type": "day (1st)" | "day (2nd)" | "night (1st)" | "night (2nd)"
+      station_statuses: "Functional" | "Not Functional" | "Ticketed"
     }
     CompositeTypes: {
       [_ in never]: never

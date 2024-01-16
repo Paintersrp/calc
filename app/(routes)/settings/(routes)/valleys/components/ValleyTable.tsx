@@ -1,7 +1,20 @@
 "use client"
 
-import { ReactNode } from "react"
-import { flexRender, type ColumnDef, type Table as TableType } from "@tanstack/react-table"
+import { useState } from "react"
+import {
+  flexRender,
+  getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type SortingState,
+  type VisibilityState,
+} from "@tanstack/react-table"
 
 import {
   Table,
@@ -11,23 +24,57 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/Table"
+import { DataTablePagination } from "@/components/ui/tables/DataTablePagination"
 
-import { DataTablePagination } from "./DataTablePagination"
+import { ValleyTableToolbar } from "./ValleyTableToolbar"
 
-interface DataTableProps<TData, TValue> {
-  table: TableType<any>
+interface RosterTableProps<TData, TValue> {
   columns: (ColumnDef<TData, TValue> & { visibility: boolean; accessorKey?: string })[]
-  toolbar: ReactNode
+  data: TData[]
+  options: FilterOptions
 }
 
-export function DataTable<TData, TValue>({
-  table,
+export function ValleyTable<TData, TValue>({
   columns,
-  toolbar,
-}: DataTableProps<TData, TValue>) {
+  data,
+  options,
+}: RosterTableProps<TData, TValue>) {
+  const [rowSelection, setRowSelection] = useState({})
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [sorting, setSorting] = useState<SortingState>([])
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: {
+      sorting,
+      columnVisibility,
+      rowSelection,
+      columnFilters,
+    },
+    initialState: {
+      pagination: {
+        pageIndex: 0,
+        pageSize: 75,
+      },
+    },
+    enableRowSelection: true,
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+  })
+
   return (
     <div className="space-y-4">
-      {toolbar && toolbar}
+      <ValleyTableToolbar filterKey="name" table={table} options={options} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
