@@ -1,194 +1,227 @@
-// "use client"
+"use client"
 
-// import { useCallback, useEffect, useState, type FC } from "react"
-// import { zodResolver } from "@hookform/resolvers/zod"
-// import { useForm } from "react-hook-form"
-// import { toast } from "sonner"
+import { useState, type FC } from "react"
+import { useRouter } from "next/navigation"
+import { zodResolver } from "@hookform/resolvers/zod"
+import axios from "axios"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
-// import { useRosterStore } from "@/lib/state/roster"
-// import { RosterEntryRequest, RosterEntrySchema } from "@/lib/validators/roster-entry"
-// import { useAddModal } from "@/hooks/useAddModal"
-// import { Button } from "@/components/ui/Button"
-// import {
-//   Dialog,
-//   DialogClose,
-//   DialogContent,
-//   DialogFooter,
-//   DialogHeader,
-//   DialogTitle,
-// } from "@/components/ui/Dialog"
+import { RosterEntryRequest, RosterEntrySchema } from "@/lib/validators/roster-entry"
+import { Button } from "@/components/ui/Button"
+import { Checkbox } from "@/components/ui/Checkbox"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/Dialog"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/Form"
+import { Icons } from "@/components/ui/Icons"
+import { Input } from "@/components/ui/Input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/Select"
+import { Text } from "@/components/ui/Text"
+import { TooltipWrapper } from "@/components/ui/Tooltip"
+import { MultiSelect } from "@/components/composed/MultiSelect"
 
-// import { MultiSelect } from "../../../../components/MultiSelect"
-// import {
-//   Form,
-//   FormControl,
-//   FormField,
-//   FormItem,
-//   FormLabel,
-//   FormMessage,
-// } from "../../../../components/ui/Form"
-// import { Input } from "../../../../components/ui/Input"
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "../../../../components/ui/Select"
+import { FilterOptions } from "./RosterTable"
 
-// const AddModal: FC = () => {
-//   const [isLoading, setIsLoading] = useState<boolean>(false)
-//   const [selected, setSelected] = useState<string[]>([])
+interface RosterAddModalProps {
+  options: FilterOptions
+}
 
-//   const { open, setOpen } = useAddModal()
-//   const { addEntry } = useRosterStore()
+const RosterAddModal: FC<RosterAddModalProps> = ({ options }) => {
+  const router = useRouter()
 
-//   const form = useForm<RosterEntryRequest>({
-//     resolver: zodResolver(RosterEntrySchema),
-//     defaultValues: {},
-//   })
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [selectedRoles, setSelectedRoles] = useState<string[]>([])
+  const [selectedItems, setSelectedItems] = useState<{ id: string; name: string }[]>([])
 
-//   const handleKeyDown = useCallback(
-//     (event: KeyboardEvent) => {
-//       if (event.ctrlKey && event.key === "q") {
-//         event.preventDefault()
-//         setOpen(!open)
-//       }
-//     },
-//     [setOpen, open]
-//   )
+  const [open, setOpen] = useState<boolean>(false)
+  const [keepOpen, setKeepOpen] = useState<boolean>(false)
 
-//   const onSubmit = async (data: RosterEntryRequest) => {
-//     try {
-//       setIsLoading(true)
+  const form = useForm<RosterEntryRequest>({
+    resolver: zodResolver(RosterEntrySchema),
+  })
 
-//       addEntry({ ...data, roles: selected })
+  const onSubmit = async (data: RosterEntryRequest) => {
+    try {
+      setIsLoading(true)
 
-//       toast.success("success")
-//     } catch (error) {
-//       console.log(error)
-//       toast.error("error")
-//     } finally {
-//       setIsLoading(false)
-//       setOpen(false)
-//     }
-//   }
+      await axios.post("/api/associates", { ...data, roles: selectedRoles })
 
-//   useEffect(() => {
-//     window.addEventListener("keydown", handleKeyDown)
+      form.reset({
+        login: "",
+        department_id: "",
+        shift_id: "",
+      })
+      setSelectedRoles([])
+      setSelectedItems([])
+      router.refresh()
 
-//     return () => {
-//       window.removeEventListener("keydown", handleKeyDown)
-//     }
-//   }, [handleKeyDown])
+      toast.success("Roster entry added,", {
+        description: "Roster entry has been created successfully.",
+      })
 
-//   return (
-//     <Dialog open={open} onOpenChange={setOpen}>
-//       <DialogContent>
-//         <DialogHeader>
-//           <DialogTitle>Add Roster Entry</DialogTitle>
-//         </DialogHeader>
+      if (!keepOpen) {
+        setOpen(false)
+      }
+    } catch (error) {
+      console.error(error)
 
-//         <Form {...form}>
-//           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full py-4">
-//             <div className="flex gap-2 w-full">
-//               <FormField
-//                 control={form.control}
-//                 name="department"
-//                 render={({ field }) => (
-//                   <FormItem className="w-full">
-//                     <FormLabel>Department</FormLabel>
-//                     <Select
-//                       disabled={isLoading}
-//                       onValueChange={field.onChange}
-//                       value={field.value}
-//                       defaultValue={field.value}
-//                     >
-//                       <FormControl>
-//                         <SelectTrigger>
-//                           <SelectValue
-//                             defaultValue={field.value}
-//                             placeholder="Select a department"
-//                           />
-//                         </SelectTrigger>
-//                       </FormControl>
-//                       <SelectContent>
-//                         {["CRETS", "Stow", "WHD", "ICQA", "Dock", "VR"].map((option) => (
-//                           <SelectItem key={option} value={option}>
-//                             {option}
-//                           </SelectItem>
-//                         ))}
-//                       </SelectContent>
-//                     </Select>
-//                     <FormMessage />
-//                   </FormItem>
-//                 )}
-//               />
-//               <FormField
-//                 control={form.control}
-//                 name="shift"
-//                 render={({ field }) => (
-//                   <FormItem className="w-full">
-//                     <FormLabel>Shift</FormLabel>
-//                     <Select
-//                       disabled={isLoading}
-//                       onValueChange={field.onChange}
-//                       value={field.value}
-//                       defaultValue={field.value}
-//                     >
-//                       <FormControl>
-//                         <SelectTrigger>
-//                           <SelectValue defaultValue={field.value} placeholder="Select a shift" />
-//                         </SelectTrigger>
-//                       </FormControl>
-//                       <SelectContent>
-//                         {["FHD", "BHD", "FHN", "BHN", "FLEX"].map((option) => (
-//                           <SelectItem key={option} value={option}>
-//                             {option}
-//                           </SelectItem>
-//                         ))}
-//                       </SelectContent>
-//                     </Select>
-//                     <FormMessage />
-//                   </FormItem>
-//                 )}
-//               />
-//             </div>
-//             <FormField
-//               control={form.control}
-//               name="login"
-//               render={({ field }) => (
-//                 <FormItem>
-//                   <FormLabel>Login</FormLabel>
-//                   <FormControl>
-//                     <Input disabled={isLoading} placeholder="Enter login..." {...field} />
-//                   </FormControl>
-//                   <FormMessage />
-//                 </FormItem>
-//               )}
-//             />
+      toast.error("Roster entry failed.", {
+        description: "Please verify your input and try again.",
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
-//             <FormItem>
-//               <FormLabel>Roles</FormLabel>
-//               <MultiSelect selected={selected} setSelected={setSelected} />
-//               <FormMessage />
-//             </FormItem>
-//           </form>
-//         </Form>
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger>
+        <TooltipWrapper content={<Text className="font-medium">Add new roster entry</Text>}>
+          <Button variant="outline" size="sm" className="ml-auto flex h-8">
+            <Icons.PlusSquare className="mr-2 h-5 w-5" />
+            Add
+          </Button>
+        </TooltipWrapper>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add Roster Entry</DialogTitle>
+        </DialogHeader>
 
-//         <DialogFooter className="gap-2 sm:gap-0 justify-end md:justify-end">
-//           <DialogClose asChild>
-//             <Button type="button">Cancel</Button>
-//           </DialogClose>
-//           <DialogClose asChild>
-//             <Button variant="success" onClick={form.handleSubmit(onSubmit)} type="button">
-//               Confirm
-//             </Button>
-//           </DialogClose>
-//         </DialogFooter>
-//       </DialogContent>
-//     </Dialog>
-//   )
-// }
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full py-4">
+            <FormField
+              control={form.control}
+              name="login"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Login</FormLabel>
+                  <FormControl>
+                    <Input disabled={isLoading} placeholder="Enter login..." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-// export { AddModal }
+            <div className="flex gap-2 w-full">
+              <FormField
+                control={form.control}
+                name="department_id"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="w-full">
+                      <FormLabel>Department</FormLabel>
+                      <Select
+                        disabled={isLoading}
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              defaultValue={field.value}
+                              placeholder="Select a department"
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {options.department.map((option) => (
+                            <SelectItem key={option.id} value={String(option.id)}>
+                              {option.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )
+                }}
+              />
+              <FormField
+                control={form.control}
+                name="shift_id"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Shift</FormLabel>
+                    <Select
+                      disabled={isLoading}
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue defaultValue={field.value} placeholder="Select a shift" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {options.shift.map((option) => (
+                          <SelectItem key={option.name} value={String(option.id)}>
+                            {option.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <FormItem>
+              <FormLabel>Roles</FormLabel>
+              {/* todo condense to one state? */}
+              <MultiSelect
+                options={options.roles}
+                selected={selectedRoles}
+                setSelected={setSelectedRoles}
+                selectedItems={selectedItems}
+                setSelectedItems={setSelectedItems}
+              />
+              <FormMessage />
+            </FormItem>
+          </form>
+        </Form>
+
+        <DialogFooter className="gap-2 sm:gap-0 justify-between w-full">
+          <div className="flex w-full items-center">
+            <Checkbox checked={keepOpen} onCheckedChange={() => setKeepOpen(!keepOpen)} />
+            <Text className="ml-2 font-medium text-sm">Add another?</Text>
+          </div>
+          <DialogClose asChild>
+            <Button type="button">Cancel</Button>
+          </DialogClose>
+          <DialogClose asChild>
+            <Button variant="success" onClick={form.handleSubmit(onSubmit)} type="button">
+              Confirm
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+export { RosterAddModal }
