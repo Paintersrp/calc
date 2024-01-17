@@ -23,6 +23,7 @@ export const ValleyCountsByIdProvider: FC<{ children: ReactNode }> = ({ children
   // Update our state only where needed
   const handleUpdates = (payload: any) => {
     console.log("here")
+    console.log(payload)
     setValleyCounts((prev) => {
       const updatedValleyCounts =
         prev[payload.new.valley_id]?.map((item) =>

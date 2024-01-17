@@ -25,13 +25,11 @@ interface ValleyCountByQuarter {
   valley_id: number
   count: number
 
-  quarter: {
+  quarter?: {
     name: string
   }
 
-  valley: {
-    name: string
-  }
+  valley: any
 }
 
 interface ValleyCountById {
@@ -46,12 +44,15 @@ interface ValleyCountById {
   }
 
   valley: {
+    valley_group: {
+      name: string
+    }
     name: string
   }
 }
 
 type ValleyCountsByQuarter = {
-  [quarterId: number]: ValleyCountByQuarter[]
+  [quarterId: number]: { [key: string]: ValleyCountByQuarter[] }
 }
 
 type ValleyCountsById = {

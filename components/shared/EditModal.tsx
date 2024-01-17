@@ -1,8 +1,7 @@
 "use client"
 
-import { type FC } from "react"
+import { ReactNode, useState, type FC } from "react"
 
-import { useMounted } from "@/hooks/useMounted"
 import { Button } from "@/components/ui/Button"
 import {
   Dialog,
@@ -15,42 +14,48 @@ import {
 } from "@/components/ui/Dialog"
 
 interface EditModalProps {
-  onConfirm: () => void
-  isLoading: boolean
+  title: string
+  description?: string
   open: boolean
   onClose: () => void
+  onSubmit: () => void
+  children: ReactNode
 }
 
-const EditModal: FC<EditModalProps> = ({ onConfirm, isLoading, open, onClose }) => {
-  const mounted = useMounted()
+const EditModal: FC<EditModalProps> = ({
+  title,
+  description,
+  open,
+  onClose,
+  onSubmit,
+  children,
+}) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  if (!mounted) {
-    return null
-  }
+  const handleSubmit = () => {
+    try {
+      setIsLoading(true)
 
-  const onChange = (open: boolean) => {
-    if (!open) {
-      onClose()
+      onSubmit()
+    } catch (error) {
+      throw error
+    } finally {
+      setIsLoading(false)
     }
   }
-
   return (
-    <Dialog open={open} onOpenChange={onChange}>
+    <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Modal</DialogTitle>
-          <DialogDescription className="">This action cannot be undone.</DialogDescription>
+          <DialogTitle>{title}</DialogTitle>
+          {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
+
+        {children}
+
         <DialogFooter className="gap-2 sm:gap-0 justify-end md:justify-end">
           <DialogClose asChild>
-            <Button
-              disabled={isLoading}
-              isLoading={isLoading}
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation()
-              }}
-            >
+            <Button disabled={isLoading} isLoading={isLoading} type="button">
               Cancel
             </Button>
           </DialogClose>
@@ -59,10 +64,7 @@ const EditModal: FC<EditModalProps> = ({ onConfirm, isLoading, open, onClose }) 
               disabled={isLoading}
               isLoading={isLoading}
               variant="success"
-              onClick={(e) => {
-                e.stopPropagation()
-                onConfirm()
-              }}
+              onClick={handleSubmit}
               type="button"
               autoFocus
             >

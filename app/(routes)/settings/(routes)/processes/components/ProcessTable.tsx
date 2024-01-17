@@ -1,17 +1,25 @@
 "use client"
 
-import type { FC } from "react"
+import type { ColumnDef } from "@tanstack/react-table"
 
-import { Tables } from "@/types/supabase"
-import { SharedColumns } from "@/components/shared/SharedColumns"
-import { SharedTable } from "@/components/shared/SharedTable"
+import { useTable } from "@/hooks/useTable"
+import { DataTable } from "@/components/ui/tables/DataTable"
 
-interface ProcessTableProps {
-  data: Tables<"processes">[]
+import { ProcessTableToolbar } from "./ProcessTableToolbar"
+
+interface ProcessTableProps<TData, TValue> {
+  columns: (ColumnDef<TData, TValue> & { visibility: boolean; accessorKey?: string })[]
+  data: TData[]
 }
 
-const ProcessTable: FC<ProcessTableProps> = ({ data }) => {
-  return <SharedTable columns={SharedColumns("")} data={data} />
-}
+export function ProcessTable<TData, TValue>({ data, columns }: ProcessTableProps<TData, TValue>) {
+  const table = useTable<TData, TValue>({ data, columns, initialPageSize: 15 })
 
-export { ProcessTable }
+  return (
+    <DataTable<TData, TValue>
+      table={table}
+      columns={columns}
+      toolbar={<ProcessTableToolbar filterKey="name" table={table} />}
+    />
+  )
+}

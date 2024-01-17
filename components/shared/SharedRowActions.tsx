@@ -13,8 +13,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu"
 import { Icons } from "@/components/ui/Icons"
-import { DeleteModal } from "@/app/(routes)/roster/components/DeleteModal"
-import { EditModal } from "@/app/(routes)/roster/components/EditModal"
+import { DeleteModal } from "@/components/shared/DeleteModal"
+import { EditModal } from "@/components/shared/EditModal"
 
 import { SharedColumn } from "./SharedColumns"
 

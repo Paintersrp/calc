@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/Input"
 import { DataTableFacetedFilter } from "@/components/ui/tables/DataTableFacetedFilter"
 import { DataTableViewOptions } from "@/components/ui/tables/DataTableViewOptions"
 
+import { ValleyAddModal } from "./ValleyAddModal"
+
 interface ValleyTableToolbarProps<TData> {
   table: Table<TData>
   filterKey: string
@@ -51,7 +53,10 @@ export function ValleyTableToolbar<TData>({
         )}
       </div>
 
-      <DataTableViewOptions table={table} />
+      <div className="flex gap-2">
+        <ValleyAddModal options={options} />
+        <DataTableViewOptions table={table} />
+      </div>
     </div>
   )
 }

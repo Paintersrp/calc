@@ -401,7 +401,7 @@ export interface Database {
       }
       valley_counts: {
         Row: {
-          count: number | null
+          count: number
           created_at: string
           id: number
           quarter_id: number
@@ -409,7 +409,7 @@ export interface Database {
           valley_id: number
         }
         Insert: {
-          count?: number | null
+          count?: number
           created_at?: string
           id?: number
           quarter_id: number
@@ -417,7 +417,7 @@ export interface Database {
           valley_id: number
         }
         Update: {
-          count?: number | null
+          count?: number
           created_at?: string
           id?: number
           quarter_id?: number

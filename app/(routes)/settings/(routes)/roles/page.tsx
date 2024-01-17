@@ -1,12 +1,15 @@
 import type { FC } from "react"
+import { getProcesses } from "@/actions/processes"
 import { getRoles } from "@/actions/roles"
 
 import { Separator } from "@/components/ui/Separator"
 
+import { RoleColumns } from "./components/RoleColumns"
 import { RoleTable } from "./components/RoleTable"
 
 const Page: FC = async () => {
   const roles = await getRoles()
+  const processes = await getProcesses()
 
   return (
     <>
@@ -17,7 +20,7 @@ const Page: FC = async () => {
         </div>
         <Separator />
 
-        <RoleTable data={roles} />
+        <RoleTable data={roles} columns={RoleColumns} processes={processes}/>
       </section>
     </>
   )

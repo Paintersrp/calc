@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/Table"
 import { DataTablePagination } from "@/components/ui/tables/DataTablePagination"
 
+import { DataTable } from "../ui/tables/DataTable"
 import { SharedTableToolbar } from "./SharedTableToolbar"
 
 export interface FilterConfig {
@@ -73,47 +74,10 @@ export function SharedTable<TData, TValue>({ columns, data }: SharedTableProps<T
   })
 
   return (
-    <div className="space-y-4">
-      <SharedTableToolbar filterKey="name" table={table} />
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id} colSpan={header.colSpan} className="h-12">
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="px-4 py-1">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <DataTablePagination table={table} />
-    </div>
+    <DataTable<TData, TValue>
+      table={table}
+      columns={columns}
+      toolbar={<SharedTableToolbar filterKey="name" table={table} />}
+    />
   )
 }

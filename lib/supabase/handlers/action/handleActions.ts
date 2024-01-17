@@ -96,6 +96,7 @@ const handleActions = <T extends Record<string, any>>({
         const { data: records, error } = await supabase
           .from(tableName)
           .select(select)
+          .order("id", { ascending: true })
           .returns<any[]>()
 
         if (error) throw error

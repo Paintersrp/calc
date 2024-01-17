@@ -19,6 +19,7 @@ const ValleysPage = async () => {
       id: valley.id,
       name: valley.name,
       updated_at: valley.updated_at,
+      group_id: valley.group_id,
       valley_group: valley.valley_group.name,
       stations: valley.stations,
     }

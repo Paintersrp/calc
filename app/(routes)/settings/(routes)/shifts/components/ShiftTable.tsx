@@ -1,17 +1,25 @@
 "use client"
 
-import type { FC } from "react"
+import type { ColumnDef } from "@tanstack/react-table"
 
-import { Tables } from "@/types/supabase"
-import { SharedColumns } from "@/components/shared/SharedColumns"
-import { SharedTable } from "@/components/shared/SharedTable"
+import { useTable } from "@/hooks/useTable"
+import { DataTable } from "@/components/ui/tables/DataTable"
 
-interface ShiftTableProps {
-  data: Tables<"shifts">[]
+import { ShiftTableToolbar } from "./ShiftTableToolbar"
+
+interface ShiftTableProps<TData, TValue> {
+  columns: (ColumnDef<TData, TValue> & { visibility: boolean; accessorKey?: string })[]
+  data: TData[]
 }
 
-const ShiftTable: FC<ShiftTableProps> = ({ data }) => {
-  return <SharedTable columns={SharedColumns("")} data={data} />
-}
+export function ShiftTable<TData, TValue>({ data, columns }: ShiftTableProps<TData, TValue>) {
+  const table = useTable<TData, TValue>({ data, columns, initialPageSize: 15 })
 
-export { ShiftTable }
+  return (
+    <DataTable<TData, TValue>
+      table={table}
+      columns={columns}
+      toolbar={<ShiftTableToolbar filterKey="name" table={table} />}
+    />
+  )
+}

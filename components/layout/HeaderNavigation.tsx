@@ -38,6 +38,10 @@ export function HeaderNavigation({ valleys }: { valleys: ValleyWithGroup }) {
       href: "/headcount",
       title: "Headcount",
     },
+    {
+      href: "/stations",
+      title: "Stations",
+    },
   ]
 
   const settingsItems = [

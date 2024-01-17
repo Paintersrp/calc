@@ -54,6 +54,7 @@ export const SharedColumns = (
     },
     visibility: true,
   },
+
   {
     accessorKey: "name",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,

@@ -7,8 +7,8 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/Button"
 import { Icons } from "@/components/ui/Icons"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
-import { DeleteModal } from "@/app/(routes)/roster/components/DeleteModal"
-import { EditModal } from "@/app/(routes)/roster/components/EditModal"
+import { DeleteModal } from "@/components/shared/DeleteModal"
+import { EditModal } from "@/components/shared/EditModal"
 
 import type { StationTableData } from "./StationColumns"
 

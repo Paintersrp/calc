@@ -1,17 +1,31 @@
 "use client"
 
-import type { FC } from "react"
+import type { ColumnDef } from "@tanstack/react-table"
 
-import { Tables } from "@/types/supabase"
-import { SharedColumns } from "@/components/shared/SharedColumns"
-import { SharedTable } from "@/components/shared/SharedTable"
+import type { Tables } from "@/types/supabase"
+import { useTable } from "@/hooks/useTable"
+import { DataTable } from "@/components/ui/tables/DataTable"
 
-interface RoleTableProps {
-  data: Tables<"departments">[]
+import { RoleTableToolbar } from "./RoleTableToolbar"
+
+interface RoleTableProps<TData, TValue> {
+  columns: (ColumnDef<TData, TValue> & { visibility: boolean; accessorKey?: string })[]
+  data: TData[]
+  processes: Tables<"processes">[]
 }
 
-const RoleTable: FC<RoleTableProps> = ({ data }) => {
-  return <SharedTable columns={SharedColumns("")} data={data} />
-}
+export function RoleTable<TData, TValue>({
+  data,
+  columns,
+  processes,
+}: RoleTableProps<TData, TValue>) {
+  const table = useTable<TData, TValue>({ data, columns, initialPageSize: 15 })
 
-export { RoleTable }
+  return (
+    <DataTable<TData, TValue>
+      table={table}
+      columns={columns}
+      toolbar={<RoleTableToolbar filterKey="name" table={table} processes={processes} />}
+    />
+  )
+}

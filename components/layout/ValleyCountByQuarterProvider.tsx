@@ -22,14 +22,37 @@ export const ValleyCountsByQuarterProvider: FC<{ children: ReactNode }> = ({ chi
   const [valleyCounts, setValleyCounts] = useState<ValleyCountsByQuarter>({})
 
   // Update our state only where needed
-  const handleUpdates = (payload: any) => {
-    setValleyCounts((prev) => {
-      const updatedQuarterCounts =
-        prev[payload.new.quarter_id]?.map((item) =>
-          item.id === payload.new.id ? payload.new : item
-        ) || []
-      return { ...prev, [payload.new.quarter_id]: updatedQuarterCounts }
-    })
+  const handleUpdates = async (payload: any) => {
+    console.log(payload.new)
+
+    const { data } = await supabase
+      .from("valley_counts")
+      .select("*, valley:valleys (*, stations (*), valley_group:valley_groups (*))")
+      .eq("id", payload.new.id)
+      .single()
+
+    if (data) {
+      setValleyCounts((prev) => {
+        const quarterId = data.quarter_id
+        const groupName = data.valley?.valley_group?.name || "Unknown"
+
+        // If the quarter and group already exist, update the relevant item.
+        // Otherwise, add the new item to the group.
+        const updatedQuarterGroups = prev[quarterId] ? { ...prev[quarterId] } : {}
+        updatedQuarterGroups[groupName] = updatedQuarterGroups[groupName] || []
+        const itemIndex = updatedQuarterGroups[groupName].findIndex((item) => item.id === data.id)
+
+        if (itemIndex > -1) {
+          // Update existing item
+          updatedQuarterGroups[groupName][itemIndex] = data
+        } else {
+          // Add new item to the group
+          updatedQuarterGroups[groupName].push(data)
+        }
+
+        return { ...prev, [quarterId]: updatedQuarterGroups }
+      })
+    }
   }
 
   useEffect(() => {
@@ -37,20 +60,49 @@ export const ValleyCountsByQuarterProvider: FC<{ children: ReactNode }> = ({ chi
     const fetchInitialData = async () => {
       const { data, error } = await supabase
         .from("valley_counts")
-        .select("*")
+        .select("*, valley:valleys (*, stations (*), valley_group:valley_groups (*))")
         .in("quarter_id", quarterIds)
+        .order("id", { ascending: true })
 
       if (!error && data) {
-        const groupedData = data.reduce((acc: any, item: any) => {
-          acc[item.quarter_id] = acc[item.quarter_id] || []
-          acc[item.quarter_id].push(item)
+        const groupedData = data.reduce((acc: any, item) => {
+          // Group by quarter_id
+          acc[item.quarter_id] = acc[item.quarter_id] || {}
+
+          // Get the valley group name
+          const groupName = item.valley?.valley_group?.name || "Unknown"
+
+          // Group by valley group name within each quarter
+          acc[item.quarter_id][groupName] = acc[item.quarter_id][groupName] || []
+          acc[item.quarter_id][groupName].push(item)
+
           return acc
         }, {})
+
         setValleyCounts(groupedData)
       } else {
         console.error("Error fetching valley counts:", error)
       }
     }
+
+    // const fetchInitialData = async () => {
+    //   const { data, error } = await supabase
+    //     .from("valley_counts")
+    //     .select("*, valley:valleys (*, stations (*), valley_group:valley_groups (*))")
+    //     .in("quarter_id", quarterIds)
+    //     .order("id", { ascending: true })
+
+    //   if (!error && data) {
+    //     const groupedData = data.reduce((acc: any, item: any) => {
+    //       acc[item.quarter_id] = acc[item.quarter_id] || []
+    //       acc[item.quarter_id].push(item)
+    //       return acc
+    //     }, {})
+    //     setValleyCounts(groupedData)
+    //   } else {
+    //     console.error("Error fetching valley counts:", error)
+    //   }
+    // }
 
     fetchInitialData()
 

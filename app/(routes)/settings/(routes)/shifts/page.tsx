@@ -3,6 +3,7 @@ import { getShifts } from "@/actions/shifts"
 
 import { Separator } from "@/components/ui/Separator"
 
+import { ShiftColumns } from "./components/ShiftColumns"
 import { ShiftTable } from "./components/ShiftTable"
 
 const Page: FC = async () => {
@@ -17,7 +18,7 @@ const Page: FC = async () => {
         </div>
         <Separator />
 
-        <ShiftTable data={shifts} />
+        <ShiftTable data={shifts} columns={ShiftColumns} />
       </section>
     </>
   )

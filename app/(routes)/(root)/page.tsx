@@ -53,7 +53,7 @@ export default function Page() {
   }, [date])
 
   return (
-    <section className="px-4 sm:container gap-6 pb-4 sm:pb-8 pt-4 sm:pt-6 md:py-10 space-y-4">
+    <section className="px-4 sm:container gap-6 pb-4 sm:pb-8 md:py-6 space-y-4">
       <div className="flex items-center justify-between">
         <Heading title="Shift Planner" description="View and manage daily staffing plans" />
 

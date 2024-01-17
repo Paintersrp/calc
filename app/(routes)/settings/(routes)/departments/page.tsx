@@ -3,6 +3,7 @@ import { getDepartments } from "@/actions/departments"
 
 import { Separator } from "@/components/ui/Separator"
 
+import { DepartmentColumns } from "./components/DepartmentColumns"
 import { DepartmentTable } from "./components/DepartmentTable"
 
 const Page: FC = async () => {
@@ -16,7 +17,7 @@ const Page: FC = async () => {
           <p className="text-sm text-muted-foreground">View and manage department entries</p>
         </div>
         <Separator />
-        <DepartmentTable data={departments} />
+        <DepartmentTable data={departments} columns={DepartmentColumns} />
       </section>
     </>
   )

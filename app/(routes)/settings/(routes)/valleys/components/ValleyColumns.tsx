@@ -8,14 +8,15 @@ import { DataTableColumnHeader } from "@/components/ui/tables/DataTableColumnHea
 
 import { ValleyRowActions } from "./ValleyRowActions"
 
-export interface ValleyTableData {
+export interface ValleyColumn {
   id: string
   name: string
+  group_id: string
   updated_at: string
   valley_group: string
 }
 
-export const ValleyColumns: (ColumnDef<ValleyTableData> & { visibility: boolean })[] = [
+export const ValleyColumns: (ColumnDef<ValleyColumn> & { visibility: boolean })[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -64,6 +65,14 @@ export const ValleyColumns: (ColumnDef<ValleyTableData> & { visibility: boolean 
       console.log(row, id, value)
       return value.includes(row.getValue(id))
     },
+  },
+
+  {
+    accessorKey: "group_id",
+    header: () => null,
+    cell: () => null,
+    enableHiding: true,
+    visibility: true,
   },
 
   {
