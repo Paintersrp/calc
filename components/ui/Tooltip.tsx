@@ -64,7 +64,7 @@ interface TooltipWrapperProps {
 const TooltipWrapper: FC<TooltipWrapperProps> = ({ children, content }) => {
   return (
     <Tooltip>
-      <TooltipTrigger>{children}</TooltipTrigger>
+      <TooltipTrigger asChild>{children}</TooltipTrigger>
       <TooltipContent side="bottom">
         <p className="dark:text-white text-dark font-normal">{content}</p>
       </TooltipContent>

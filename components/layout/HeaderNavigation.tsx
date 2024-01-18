@@ -31,12 +31,12 @@ export function HeaderNavigation({ valleys }: { valleys: ValleyWithGroup }) {
       title: "Staffing",
     },
     {
-      href: "/roster",
-      title: "Roster",
-    },
-    {
       href: "/headcount",
       title: "Headcount",
+    },
+    {
+      href: "/roster",
+      title: "Roster",
     },
     {
       href: "/stations",
@@ -64,6 +64,10 @@ export function HeaderNavigation({ valleys }: { valleys: ValleyWithGroup }) {
     {
       href: "/settings/valleys",
       title: "Manage Valleys",
+    },
+    {
+      href: "/settings/valley-groups",
+      title: "Manage Valley Groups",
     },
   ]
 

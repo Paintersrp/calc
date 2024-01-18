@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/Select"
 import { Separator } from "@/components/ui/Separator"
+import { Switch } from "@/components/ui/Switch"
 
 interface StationCardProps {
   station: Tables<"stations">
@@ -70,7 +71,7 @@ const StationCard: FC<StationCardProps> = ({ station }) => {
             onValueChange={(value) => updateData(value, "status")}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Select a status..." />
+              <SelectValue defaultValue={station.status} placeholder="Select a status..." />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -82,28 +83,23 @@ const StationCard: FC<StationCardProps> = ({ station }) => {
           </Select>
         </div>
         <div className="space-y-1">
-          <div className="flex items-center pb-1">
-            <span
-              className={`h-2 w-2 rounded-full mr-2 ${
-                station.broadcast_open ? "bg-success" : "bg-destructive"
-              }`}
+          <div className="flex items-center space-x-2 justify-between">
+            <div className="flex items-center">
+              <span
+                className={`h-2 w-2 rounded-full mr-1.5 ${
+                  station.broadcast_open ? "bg-success" : "bg-destructive"
+                }`}
+              />
+              <Label htmlFor="broadcast">Broadcast</Label>
+            </div>
+            <Switch
+              id="broadcast"
+              disabled={station.status === "Not Functional" || station.status === "Ticketed"}
+              checked={station.broadcast_open}
+              onCheckedChange={(value) => updateData(String(value), "broadcast")}
+              className="data-[state=checked]:bg-success data-[state=unchecked]:bg-destructive/75"
             />
-            <Label>Broadcast Open</Label>
           </div>
-          <Select
-            defaultValue={String(station.broadcast_open)}
-            onValueChange={(value) => updateData(value, "broadcast")}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select an open status..." />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="true">TRUE</SelectItem>
-                <SelectItem value="false">FALSE</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
         </div>
       </CardContent>
     </Card>

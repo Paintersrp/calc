@@ -23,8 +23,6 @@ export const ValleyCountsByQuarterProvider: FC<{ children: ReactNode }> = ({ chi
 
   // Update our state only where needed
   const handleUpdates = async (payload: any) => {
-    console.log(payload.new)
-
     const { data } = await supabase
       .from("valley_counts")
       .select("*, valley:valleys (*, stations (*), valley_group:valley_groups (*))")
@@ -84,25 +82,6 @@ export const ValleyCountsByQuarterProvider: FC<{ children: ReactNode }> = ({ chi
         console.error("Error fetching valley counts:", error)
       }
     }
-
-    // const fetchInitialData = async () => {
-    //   const { data, error } = await supabase
-    //     .from("valley_counts")
-    //     .select("*, valley:valleys (*, stations (*), valley_group:valley_groups (*))")
-    //     .in("quarter_id", quarterIds)
-    //     .order("id", { ascending: true })
-
-    //   if (!error && data) {
-    //     const groupedData = data.reduce((acc: any, item: any) => {
-    //       acc[item.quarter_id] = acc[item.quarter_id] || []
-    //       acc[item.quarter_id].push(item)
-    //       return acc
-    //     }, {})
-    //     setValleyCounts(groupedData)
-    //   } else {
-    //     console.error("Error fetching valley counts:", error)
-    //   }
-    // }
 
     fetchInitialData()
 

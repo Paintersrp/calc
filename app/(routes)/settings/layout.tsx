@@ -31,6 +31,10 @@ const navItems = [
     title: "Valleys",
     href: "/settings/valleys",
   },
+  {
+    title: "Valley Groups",
+    href: "/settings/valley-groups",
+  },
 ]
 
 export default function SettingsLayout({ children }: SettingsLayoutProps) {

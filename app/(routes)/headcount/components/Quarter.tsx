@@ -4,14 +4,14 @@ import { Separator } from "@/components/ui/Separator"
 import { Heading } from "@/components/composed/Heading"
 
 import { HeadcountTable } from "./HeadcountTable"
-import { TotalsDisplay } from "./TotalsDisplay"
+import { Totals } from "./Totals"
 
-interface QuarterSectionProps {
+interface QuarterProps {
   headcounts: { [key: string]: ValleyCountByQuarter[] }
   quarter: string
 }
 
-const QuarterSection: FC<QuarterSectionProps> = ({ headcounts, quarter }) => {
+const Quarter: FC<QuarterProps> = ({ headcounts, quarter }) => {
   return (
     <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
       <div className="col-span-2 space-y-4">
@@ -29,10 +29,10 @@ const QuarterSection: FC<QuarterSectionProps> = ({ headcounts, quarter }) => {
       <div className="space-y-4 border rounded-lg p-4">
         <Heading title="Totals" titleClass="text-xl" />
         <Separator />
-        <TotalsDisplay headcounts={headcounts}/>
+        <Totals headcounts={headcounts} />
       </div>
     </section>
   )
 }
 
-export { QuarterSection }
+export { Quarter }

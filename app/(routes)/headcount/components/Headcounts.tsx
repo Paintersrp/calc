@@ -1,7 +1,5 @@
 "use client"
 
-import type { FC } from "react"
-
 import { DevCode } from "@/components/ui/DevCode"
 import { Separator } from "@/components/ui/Separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs"
@@ -9,21 +7,15 @@ import { Heading } from "@/components/composed/Heading"
 import { Loading } from "@/components/layout/Loading"
 import { useValleyCountsByQuarterContext } from "@/components/layout/ValleyCountByQuarterProvider"
 
-import { QuarterSection } from "./QuarterSection"
+import { Quarter } from "./Quarter"
 
-interface HeadcountsProps {
-  //
-}
-
-const Headcounts: FC<HeadcountsProps> = ({}) => {
+const Headcounts = () => {
   const valleyCounts = useValleyCountsByQuarterContext()
-
-  console.log(valleyCounts)
 
   const isEmpty = valleyCounts && Object.keys(valleyCounts).length === 0
 
   return (
-    <section className="space-y-4">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
         <Heading title="Headcounts" />
       </div>
@@ -45,13 +37,13 @@ const Headcounts: FC<HeadcountsProps> = ({}) => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="1" className="mt-4">
-            <QuarterSection headcounts={valleyCounts[1]} quarter="Q1" />
+            <Quarter headcounts={valleyCounts[1]} quarter="Q1" />
           </TabsContent>
           <TabsContent value="2" className="mt-4">
-            <QuarterSection headcounts={valleyCounts[2]} quarter="Q2" />
+            <Quarter headcounts={valleyCounts[2]} quarter="Q2" />
           </TabsContent>
           <TabsContent value="3" className="mt-4">
-            <QuarterSection headcounts={valleyCounts[3]} quarter="Q3" />
+            <Quarter headcounts={valleyCounts[3]} quarter="Q3" />
           </TabsContent>
           <TabsContent value="4" className="mt-4">
             {valleyCounts[4]["Mezz"].map((count) => (
@@ -62,7 +54,7 @@ const Headcounts: FC<HeadcountsProps> = ({}) => {
       ) : (
         <Loading />
       )}
-    </section>
+    </div>
   )
 }
 

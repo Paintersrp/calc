@@ -7,18 +7,16 @@ import { Separator } from "@/components/ui/Separator"
 import { Skeleton } from "@/components/ui/Skeleton"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
 
-const GroupSkeleton: FC = () => {
+const GroupAddSkeleton: FC = () => {
+  // todo logic
   return (
     <div className="relative">
       <Card className="mb-4 space-y-2">
         <CardHeader className="p-4 pb-2 justify-center">
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <Skeleton className="h-[1.9rem] w-2/5 bg-accent/75" />
 
-            <div className="flex gap-2">
-              <Skeleton className="h-6 w-6 rounded-md bg-accent/75" />
-              <Skeleton className="h-6 w-6 rounded-md bg-accent/75" />
-            </div>
+            <Skeleton className="h-6 w-6 rounded-md bg-accent/75" />
           </div>
         </CardHeader>
 
@@ -47,7 +45,7 @@ const GroupSkeleton: FC = () => {
       </Card>
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <TooltipWrapper content="Add Group">
-          <Button variant="success" size="iconSm" className="h-14 w-14">
+          <Button variant="success" size="iconSm" className="h-14 w-14 bg-success/50">
             <Icons.PlusSquare className="w-10 h-10" />
           </Button>
         </TooltipWrapper>
@@ -56,4 +54,4 @@ const GroupSkeleton: FC = () => {
   )
 }
 
-export { GroupSkeleton }
+export { GroupAddSkeleton }

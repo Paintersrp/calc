@@ -5,11 +5,17 @@ import { cn } from "@/lib/utils"
 
 interface AnimateHeightProps {
   children: React.ReactNode
+  layout?: boolean
   transition?: Transition
   className?: string
 }
 
-export const AnimateHeight: FC<AnimateHeightProps> = ({ children, transition, className }) => {
+export const AnimateHeight: FC<AnimateHeightProps> = ({
+  children,
+  layout,
+  transition,
+  className,
+}) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [height, setHeight] = useState<number | "auto">("auto")
 
@@ -30,8 +36,10 @@ export const AnimateHeight: FC<AnimateHeightProps> = ({ children, transition, cl
 
   return (
     <motion.div
+      layout={layout}
       className={cn(className, "overflow-hidden")}
       style={{ height }}
+      initial={false}
       animate={{ height }}
       transition={transition}
     >
@@ -46,4 +54,5 @@ AnimateHeight.defaultProps = {
     type: "ease",
     ease: "easeInOut",
   },
+  layout: false,
 }

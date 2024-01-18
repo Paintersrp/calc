@@ -5,6 +5,8 @@ import { motion } from "framer-motion"
 
 import { useMounted } from "@/hooks/useMounted"
 
+import { Broadcasts } from "./Broadcasts"
+import { useBroadcasts } from "./BroadcastsProvider"
 import { QuickAccessToggle } from "./QuickAccessToggle"
 import { ThemeToggle } from "./ThemeToggle"
 
@@ -22,6 +24,7 @@ const transition = {
 
 const HeaderActions: FC = ({}) => {
   const mounted = useMounted()
+  const { broadcasts } = useBroadcasts()
 
   if (!mounted) return null
 
@@ -34,6 +37,7 @@ const HeaderActions: FC = ({}) => {
       variants={animationVariants}
       transition={transition}
     >
+      <Broadcasts />
       <QuickAccessToggle />
       <ThemeToggle />
     </motion.div>
